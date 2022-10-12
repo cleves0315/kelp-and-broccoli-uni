@@ -80,7 +80,8 @@ const { height, iconSize, rectHieght, rectTop } = toRefs(data);
 </script>
 
 <style lang="scss">
-@import '@/styles/global.scss';
+$overdueRed: #d03c35; // 过期红
+$themeGreen: #07b45b; // 主题绿
 
 .navigation-bar {
   position: relative;

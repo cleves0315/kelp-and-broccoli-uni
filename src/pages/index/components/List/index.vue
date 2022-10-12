@@ -4,8 +4,8 @@
       <ListItem
         :class="itemClass(item.type)"
         :icon="itemIcon(item.type)"
-        :content="itemContent(item.type)"
-        :subtitle="itemSubtitle(item.type)"
+        content="itemContent(item.type)"
+        subtitle="itemSubtitle(item.type)"
         :showClose="isShowClose(item.type)"
         :hasLine="item.type === TypeEnum.life || item.type === TypeEnum.end"
         :onClick="() => handleClick(item.type)"
@@ -26,8 +26,6 @@ import DateOver from '@/assets/plan/date_over.svg';
 // import RepeatIcon from '@/assets/plan/repeat.svg';
 // import RepeatLiveIcon from '@/assets/plan/repeat_live.svg';
 
-import { usePlanDetailStore } from '@/stores/planDetail';
-import { showHourseAndMinute } from '@/utils/common';
 
 /**
  * 左侧icon图标
@@ -98,15 +96,11 @@ export const TypeMapList = [
 
 <script lang="ts" setup>
 import { PlanTypeEnum } from '@/constants/enum';
-import { usePlanStore } from '@/stores/plan';
 import ListItem from '../ListItem/index.vue';
 
 export interface Props {
   onClick?: (type: TypeEnum) => void;
 }
-
-const store = usePlanStore();
-const detailStore = usePlanDetailStore();
 
 const { onClick } = defineProps<Props>();
 
@@ -115,7 +109,7 @@ const { onClick } = defineProps<Props>();
  * @param { Number } d
  * @return 返回格式 xx年xx月xx日 周x
  */
-const formatDate = (times) => {
+const formatDate = (times: string) => {
   const today = new Date();
   let date = new Date(times);
   let y = date.getFullYear();
@@ -170,81 +164,24 @@ const formatDate = (times) => {
   return dateString;
 };
 
-const itemContent = (type: TypeEnum) => {
-  const { plan } = detailStore;
-  switch (type) {
-    case TypeEnum.remind:
-      const { remind_time } = plan;
-      if (remind_time) {
-        return `在 ${showHourseAndMinute(remind_time)} 时提醒我`;
-      }
-      return contentMap[TypeEnum.remind];
-    case TypeEnum.end:
-      const { closing_date } = plan;
-      if (closing_date) {
-        return `${formatDate(closing_date)} 到期`;
-      }
-      return contentMap[TypeEnum.end];
-
-    default:
-      return contentMap[type] || '';
-  }
-};
-
-const itemSubtitle = (type: TypeEnum) => {
-  switch (type) {
-    case TypeEnum.remind:
-      return formatDate(detailStore.plan.remind_time);
-
-    default:
-      return '';
-  }
-};
 
 const isItemActive = (type: TypeEnum) => {
   switch (type) {
-    case TypeEnum.life:
-      return detailStore.plan.type === PlanTypeEnum.today;
-    case TypeEnum.remind:
-      return !!detailStore.plan.remind_time;
-    case TypeEnum.end:
-      return !!detailStore.plan.closing_date;
-
     default:
       return false;
   }
 };
 
 const itemClass = (type: TypeEnum) => {
-  if (isItemActive(type)) {
-    // 超过截止时间 - 展示红色字体
-    if (type === TypeEnum.end && Date.now() > detailStore.plan.closing_date) {
-      return 'overdue';
-    }
-    return 'active';
-  }
   return '';
 };
 
 const itemIcon = (type: TypeEnum) => {
-  if (isItemActive(type)) {
-    // 超过截止时间
-    if (type === TypeEnum.end && Date.now() > detailStore.plan.closing_date) {
-      return DateOver;
-    }
-    return liveIconMap[type];
-  }
   return iconMap[type];
 };
 
 const isShowClose = (type: TypeEnum) => {
   switch (type) {
-    case TypeEnum.life:
-      return detailStore.plan.type === PlanTypeEnum.today;
-    case TypeEnum.remind:
-      return !!detailStore.plan.remind_time;
-    case TypeEnum.end:
-      return !!detailStore.plan.closing_date;
     default:
       return false;
   }
@@ -256,16 +193,6 @@ const handleClick = (type: TypeEnum) => {
 
 const handleClose = (type: TypeEnum) => {
   switch (type) {
-    case TypeEnum.life:
-      store.editPlan(detailStore.plan.plan_no, { type: 'all' });
-      break;
-    case TypeEnum.remind:
-      store.editPlan(detailStore.plan.plan_no, { remind_time: 0 });
-      break;
-    case TypeEnum.end:
-      store.editPlan(detailStore.plan.plan_no, { closing_date: 0 });
-      break;
-
     default:
       break;
   }
@@ -273,7 +200,8 @@ const handleClose = (type: TypeEnum) => {
 </script>
 
 <style lang="scss">
-@import '@/styles/global.scss';
+$overdueRed: #d03c35; // 过期红
+$themeGreen: #07b45b; // 主题绿
 
 .active {
   color: $themeGreen;

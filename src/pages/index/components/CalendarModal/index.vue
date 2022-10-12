@@ -1,12 +1,12 @@
 <template>
   <div
     class="calendar-box"
-    :class="{ hide: !detailStore.calendarModalConfig.show }"
+    :class="{ hide: !show }"
     @click.self="handleClose"
   >
     <div
       class="container"
-      :class="{ hidebox: !detailStore.calendarModalConfig.show }"
+      :class="{ hidebox: !show }"
       :style="{ bottom: `-${bottom}px` }"
       @touchstart="handelTouchStart"
       @touchmove="handelTouchMove"
@@ -19,7 +19,6 @@
       <Calendar :onClick="handleOnChoiceDate" :onBack="handleOnBack" :onSetting="handleTapSetup" />
       <!-- 选择时间 -->
       <div
-        v-if="detailStore.calendarModalConfig.showTimeColumn"
         class="choice-date-line"
         :class="{ 'choice-date-line-touch': isChoiceLineTouch }"
         @click.stop="handleOnChoiceTime"
@@ -28,7 +27,7 @@
       >
         <div class="left">选择时间</div>
         <div class="right">
-          <div class="right-txt">{{ detailStore.calendarModalConfig.timeCloumnText }}</div>
+          <div class="right-txt">明天</div>
           <image class="icon" src="@/assets/to_back_green.svg"></image>
         </div>
       </div>
@@ -40,20 +39,17 @@
 <script lang="ts" setup>
 import Calendar, { SelectDay } from '@/components/calendar/index.vue';
 import IphoneBottomSideAdapter from '@/components/IphoneBottomSideAdapter/index.vue';
-import { usePlanStore } from '@/stores/plan';
-import { usePlanDetailStore } from '@/stores/planDetail';
 import { log } from '@/utils/log';
 import { reactive, toRefs, watch } from 'vue';
 
 export interface Props {
+  show: boolean;
   chioceTime?: (selectDate: SelectDay) => void;
   onClose?: () => void;
   onBack?: () => void;
 }
 
-const store = usePlanStore();
-const detailStore = usePlanDetailStore();
-const { onClose, onBack, chioceTime } = defineProps<Props>();
+const { show, onClose, onBack, chioceTime } = defineProps<Props>();
 
 const data = reactive({
   startY: 0,
@@ -63,37 +59,19 @@ const data = reactive({
 
 let choiceDate: SelectDay;
 
-watch(
-  () => detailStore.calendarModalConfig.show,
-  (newValue) => {
-    if (newValue && !detailStore.calendarModalConfig.choiceDate) {
-      const today = new Date();
-
-      detailStore.setCalendarModalConfig({
-        show: true,
-        choiceDate: {
-          year: today.getFullYear(),
-          month: today.getMonth() + 1,
-          day: today.getDate(),
-        },
-      });
-    }
-  },
-);
-
-const handelTouchStart = (e) => {
+const handelTouchStart = (e: any) => {
   const pageY = e.changedTouches[0].pageY;
   data.startY = pageY;
 };
 
-const handelTouchMove = (e) => {
+const handelTouchMove = (e: any) => {
   const moveY = e.changedTouches[0].pageY;
   let difY = moveY - data.startY;
   if (difY <= 0) difY = 0;
   data.bottom = difY;
 };
 
-const handelTouchEnd = (e) => {
+const handelTouchEnd = (e: any) => {
   const endY = e.changedTouches[0].pageY;
   if (endY - data.startY > 50) {
     handleClose();
@@ -106,7 +84,6 @@ const handelTouchEnd = (e) => {
 };
 
 const handleClose = () => {
-  detailStore.setCalendarModalConfig({ show: false, showTimeColumn: false, timeCloumnText: '' });
   onClose?.();
 };
 
@@ -117,31 +94,11 @@ const handleOnBack = () => {
 
 /** 点击设置按钮 */
 const handleTapSetup = () => {
-  // argument -> value
-  // choiceDate === value 两者相同，这里直接用 sotre 数据
-  const choiceDate = detailStore.calendarModalConfig.choiceDate;
-  const mText = Math.floor(choiceDate.month) < 10 ? `0${choiceDate.month}` : choiceDate.month;
-  const dText = Math.floor(choiceDate.day) < 10 ? `0${choiceDate.day}` : choiceDate.day;
-  const date = `${choiceDate.year}-${mText}-${dText}`;
-  const curntHour = new Date().getHours() + 4;
-  const remindDate = `${date} ${curntHour}:00`;
-
-  if (detailStore.calendarModalConfig.mark === 'remind') {
-    log('设置提醒时间：', remindDate);
-    store.editPlan(detailStore.plan.plan_no, { remind_time: new Date(remindDate).getTime() });
-  } else if (detailStore.calendarModalConfig.mark === 'end') {
-    const lastTime = new Date(`${date} 23:59:59`).getTime();
-    log('设置截止时间：', lastTime);
-    store.editPlan(detailStore.plan.plan_no, {
-      closing_date: lastTime,
-    });
-  }
-  detailStore.setCalendarModalConfig({ show: false });
 };
 
 const handleOnChoiceDate = (value: SelectDay) => {
   choiceDate = value;
-  detailStore.setCalendarModalConfig({ show: true, choiceDate: value });
+  log('handleOnChoiceDate: ', value)
 };
 
 /** 底部选择时间栏touch手势 */
@@ -154,8 +111,6 @@ const choiceLineTouchEnd = () => {
 
 /** 点击选择时间栏 */
 const handleOnChoiceTime = () => {
-  detailStore.setCalendarModalConfig({ show: false });
-  detailStore.setPickerTimeConfig({ show: true });
   chioceTime?.(choiceDate);
 };
 

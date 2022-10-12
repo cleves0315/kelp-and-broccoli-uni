@@ -1,33 +1,20 @@
 <template>
   <div class="footer">
-    <div class="content" :class="{ finished: detailStore.plan.is_finish }">
-      {{ beforeTime() }} {{ formatDate() }}
+    <div class="content">
+      创建于 {{ formatDate() }}
     </div>
     <div class="del-btn" @click="handleClick"></div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { usePlanStore } from '@/stores/plan';
-import { usePlanDetailStore } from '@/stores/planDetail';
-import Taro from '@tarojs/taro';
-
-const store = usePlanStore();
-const detailStore = usePlanDetailStore();
-
-const beforeTime = () => {
-  if (detailStore.plan.is_finish) {
-    return '完成于';
-  }
-  return '创建于';
-};
 
 /**
  *  根据传入的时间戳返回一定格式的日期文字
  * @return 返回格式 xx年xx月xx日 周x
  */
 const formatDate = () => {
-  const date = new Date(detailStore.plan.create_time);
+  const date = new Date();
   const y = date.getFullYear();
   const m = date.getMonth() + 1;
   const d = date.getDate();
@@ -70,25 +57,20 @@ const formatDate = () => {
 
 const handleClick = async () => {
   // 两下震动
-  Taro.vibrateShort();
-  setTimeout(() => Taro.vibrateShort(), 200);
+  uni.vibrateShort();
+  setTimeout(() => uni.vibrateShort(), 200);
 
-  try {
-    await Taro.showActionSheet({
-      itemList: ['删除计划'],
-      itemColor: '#EA3927',
-    });
+  uni.showActionSheet({
+    itemList: ['删除计划'],
+    itemColor: '#EA3927',
+  });
 
-    store.delPlan(detailStore.plan.plan_no);
-    Taro.navigateBack();
-  } catch (error) {
-    console.log(error);
-  }
 };
 </script>
 
 <style lang="scss">
-@import '@/styles/global.scss';
+$overdueRed: #d03c35; // 过期红
+$themeGreen: #07b45b; // 主题绿
 
 .plan-detail .footer {
   position: fixed;

@@ -3,10 +3,9 @@
 </template>
 
 <script lang="ts" setup>
-import { isIphone } from '@/utils/common';
 import { ref } from 'vue';
 
-const iphonex = ref(isIphone());
+const iphonex = ref(false);
 </script>
 
 <style lang="scss">

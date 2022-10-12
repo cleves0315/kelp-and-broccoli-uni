@@ -1,70 +1,32 @@
 <template>
-  <template v-for="step in detailStore.plan.step_list" :key="step.id">
+  <template v-for="step in [1,2,3]" :key="step.id">
     <div class="step" :class="{ touch: touching }" @touchstart="touching = true" @touchend="touching = false">
       <div class="ident-wrap">
-        <Ident size="small" :checked="step.is_finish" :onClick="() => handleChangeState(step)" />
+        <Ident size="small" />
       </div>
-      <input class="step-title" :value="step.title" @blur="handleBlur(step.id, $event)" />
-      <div class="del-btn-wrap" @click="handleDelete(step.id)"><div class="del-btn"></div></div>
+      <input class="step-title" :value="step"  />
+      <div class="del-btn-wrap" ><div class="del-btn"></div></div>
     </div>
   </template>
 </template>
 
 <script lang="ts" setup>
 import Ident from '@/components/Ident/index.vue';
-import { usePlanStore } from '@/stores/plan';
-import { usePlanDetailStore } from '@/stores/planDetail';
 import { IStep } from '@/types/plan';
-import Taro from '@tarojs/taro';
 import { reactive, toRefs } from 'vue';
 
-export interface Props {
-  // checkedBackgroundColor?: string; // 选中后的背景颜色
-}
-
-const store = usePlanStore();
-const detailStore = usePlanDetailStore();
 
 const data = reactive({
   focus: false,
   touching: false,
 });
 
-const handleChangeState = (step: IStep) => {
-  store.editStep(detailStore.plan.plan_no, step.id, {
-    is_finish: !step.is_finish,
-  });
-};
-
-const handleBlur = (stepId: string, e) => {
-  const value = e.detail.value.trim() as string;
-
-  store.editStep(detailStore.plan.plan_no, stepId, {
-    title: value,
-  });
-};
-
-const handleDelete = async (stepId: string) => {
-  // 震动
-  Taro.vibrateShort();
-
-  try {
-    await Taro.showActionSheet({
-      itemList: ['删除计划'],
-      itemColor: '#EA3927',
-    });
-
-    store.delStep(detailStore.plan.plan_no, stepId);
-  } catch (error) {
-    console.log(error);
-  }
-};
-
 const { touching } = toRefs(data);
 </script>
 
 <style lang="scss">
-@import '@/styles/global.scss';
+$overdueRed: #d03c35; // 过期红
+$themeGreen: #07b45b; // 主题绿
 
 .todo-list .step {
   display: flex;

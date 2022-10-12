@@ -24,15 +24,7 @@
 <script lang="ts" setup>
 import { reactive, toRefs } from 'vue';
 import Ident from '@/components/Ident/index.vue';
-import { usePlanStore } from '@/stores/plan';
-import { usePlanDetailStore } from '@/stores/planDetail';
 
-export interface Props {
-  // checkedBackgroundColor?: string; // 选中后的背景颜色
-}
-
-const store = usePlanStore();
-const detailStore = usePlanDetailStore();
 
 const data = reactive({
   value: '',
@@ -40,13 +32,12 @@ const data = reactive({
   touching: false,
 });
 
-const handleOnBlur = (e) => {
+const handleOnBlur = (e: any) => {
   const value = e.detail.value.trim() as string;
   data.focus = false;
 
   if (value) {
     data.value = '';
-    store.addStep(detailStore.plan.plan_no, value);
   }
 };
 
@@ -54,7 +45,8 @@ const { focus, value, touching } = toRefs(data);
 </script>
 
 <style lang="scss">
-@import '@/styles/global.scss';
+$overdueRed: #d03c35; // 过期红
+$themeGreen: #07b45b; // 主题绿
 
 .todo-list .operation {
   display: flex;

@@ -1,8 +1,8 @@
 <template>
-  <div class="picker-time" :class="{ hide: !detailStore.pickerTimeConfig.show }" @click="handleClose">
+  <div class="picker-time" :class="{ hide: !show }" @click="handleClose">
     <div
       class="container"
-      :class="{ hidebox: !detailStore.pickerTimeConfig.show }"
+      :class="{ hidebox: !show }"
       :style="{ bottom: `-${bottom}px` }"
     >
       <div @touchstart="handelTouchStart" @touchmove="handelTouchMove" @touchend="handelTouchEnd">
@@ -44,8 +44,6 @@
 
 <script lang="ts" setup>
 import IphoneBottomSideAdapter from '@/components/IphoneBottomSideAdapter/index.vue';
-import { usePlanStore } from '@/stores/plan';
-import { usePlanDetailStore } from '@/stores/planDetail';
 import { log } from '@/utils/log';
 import { reactive, toRefs, watch } from 'vue';
 
@@ -75,6 +73,7 @@ for (let i = 0; i <= 59; i++) {
 }
 
 interface Props {
+  show: boolean;
   currentDate: CurrentDate;
   onClose?: () => void;
   onBack?: (time: string) => void;
@@ -83,9 +82,7 @@ interface Props {
 
 let startY = 0;
 
-const store = usePlanStore();
-const detailStore = usePlanDetailStore();
-const { currentDate, onClose, onBack, onSetup } = defineProps<Props>();
+const { show, currentDate, onClose, onBack, onSetup } = defineProps<Props>();
 
 const data = reactive({
   hourse: hourList,
@@ -94,38 +91,8 @@ const data = reactive({
   bottom: 0, // 绝对定位bottom值 px
 });
 
-watch(
-  () => detailStore.calendarModalConfig.timeCloumnText,
-  (newCurrentTime) => {
-    if (newCurrentTime) {
-      const value = data.value;
-      const h = newCurrentTime.split(':')[0];
-      const m = newCurrentTime.split(':')[1];
-
-      for (let i = 0; i < data.hourse.length; i++) {
-        const item = data.hourse[i];
-        if (+item === +h) {
-          value[0] = i;
-          break;
-        }
-      }
-      for (let i = 0; i < data.minutes.length; i++) {
-        const item = data.minutes[i];
-        if (+item === +m) {
-          value[1] = i;
-          break;
-        }
-      }
-
-      // 根据当前传递的时间，默认选择列表项里
-      data.value = value;
-    }
-  },
-);
 
 const handleClose = () => {
-  detailStore.setPickerTimeConfig({ show: false });
-  detailStore.setCalendarModalConfig({ show: false, showTimeColumn: false, timeCloumnText: '' });
   onClose?.();
 };
 const handelTouchStart = (e) => {
@@ -158,13 +125,6 @@ const handleOnBack = () => {
   const pickResultM = data.minutes[value[1]];
   const pickTime = `${pickResultH}:${pickResultM}`;
 
-  detailStore.setPickerTimeConfig({ show: false });
-  detailStore.setCalendarModalConfig({
-    show: true,
-    mark: 'remind',
-    showTimeColumn: true,
-    timeCloumnText: pickTime,
-  });
   onBack?.(pickTime);
 };
 const handleOnSetup = () => {
@@ -172,15 +132,7 @@ const handleOnSetup = () => {
   const hourse = data.hourse[value[0]];
   const minutes = data.minutes[value[1]];
   const time = `${hourse}:${minutes}`;
-  const choiceDate = detailStore.calendarModalConfig.choiceDate;
-  const mText = Math.floor(choiceDate.month) < 10 ? `0${choiceDate.month}` : choiceDate.month;
-  const dText = Math.floor(choiceDate.day) < 10 ? `0${choiceDate.day}` : choiceDate.day;
-  const date = `${choiceDate.year}-${mText}-${dText}`;
-  const remindDate = `${date} ${time}`;
 
-  log('设置提醒时间：', remindDate);
-  store.editPlan(detailStore.plan.plan_no, { remind_time: new Date(remindDate).getTime() });
-  detailStore.setPickerTimeConfig({ show: false });
   onSetup?.(time);
 };
 

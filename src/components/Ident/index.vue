@@ -5,7 +5,6 @@
 </template>
 
 <script lang="ts" setup>
-import Taro from '@tarojs/taro';
 import { defineProps } from 'vue';
 export interface Props {
   checked?: boolean; // 当前是否选中
@@ -18,7 +17,7 @@ const { checked = false, size = 'normal', onClick } = defineProps<Props>();
 
 const handleTap = () => {
   if (onClick) {
-    Taro.vibrateShort({
+    uni.vibrateShort({
       // @ts-ignore
       type: 'heavy',
     });
@@ -28,7 +27,8 @@ const handleTap = () => {
 </script>
 
 <style lang="scss">
-@import '@/styles/global.scss';
+$overdueRed: #d03c35; // 过期红
+$themeGreen: #07b45b; // 主题绿
 
 .ident {
   width: 50px;

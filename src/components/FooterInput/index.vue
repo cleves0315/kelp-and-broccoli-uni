@@ -28,7 +28,6 @@
 </template>
 
 <script lang="ts" setup>
-import { isIphone } from '@/utils/common';
 import { defineProps, toRefs, reactive } from 'vue';
 export interface Props {
   bgColor?: string; // 背景颜色
@@ -57,7 +56,7 @@ const {
 
 const data: Data = reactive({
   showMask: false,
-  isPhone: isIphone(),
+  isPhone: false,
   cursorSpacing: 0,
   value: '',
   isFocus: false,

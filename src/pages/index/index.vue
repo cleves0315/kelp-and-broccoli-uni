@@ -1,72 +1,30 @@
 <template>
   <div class="plan-detail">
-    <template v-if="!!detailStore.plan">
-      <TodoList />
-      <List :onClick="(type) => onListClick(type)" />
-      <Describe />
-      <Footers />
-      <CalendarModal :onBack="onCalendarModalBack" />
-      <PickerTime :currentDate="{ year: 2022, month: 10, day: 4 }" />
-    </template>
+    <TodoList />
+    <List :onClick="(type) => onListClick(type)" />
+    <Describe />
+    <Footers />
+    <CalendarModal :show="showCalendarModal" :onBack="onCalendarModalBack" :chioceTime="onChioceTime" />
+    <PickerTime :show="showTime" :currentDate="{ year: 2022, month: 10, day: 4 }" :onBack="onPickerTimeBack" :onClose="onPickerTimeClose" />
   </div>
 </template>
 
 <script lang="ts" setup>
-import Taro from '@tarojs/taro';
-import { onUnmounted } from 'vue';
 import CalendarModal from './components/CalendarModal/index.vue';
 import TodoList from './components/TodoList/index.vue';
 import List, { TypeEnum } from './components/List/index.vue';
 import Describe from './components/Describe/index.vue';
 import Footers from './components/Footer/index.vue';
-import { usePlanStore } from '@/stores/plan';
-import { useReady, useRouter } from '@tarojs/taro';
-import { usePlanDetailStore } from '@/stores/planDetail';
-import { PlanTypeEnum } from '@/constants/enum';
-import { requestSubscribeMessage } from '@/utils/common';
-import { SUB_TEMPLATE_IDS } from '@/constants';
 import PickerTime from './components/picker-time/index.vue';
+import { reactive, toRefs } from 'vue';
 
-const store = usePlanStore();
-const detailStore = usePlanDetailStore();
-const { params } = useRouter();
-const { plan_no } = params;
-
-useReady(() => {
-  detailStore.setPlan(store.planList.find((m) => m.plan_no === plan_no));
-});
-
-onUnmounted(() => {
-  if (detailStore.plan) {
-    store.editPlan(detailStore.plan.plan_no, detailStore.plan, true);
-    detailStore.setPlan(undefined);
-  }
-});
+const data = reactive({
+  showCalendarModal: true,
+  showTime: false,
+})
 
 const onListClick = async (type: TypeEnum) => {
-  switch (type) {
-    case TypeEnum.life:
-      store.editPlan(detailStore.plan.plan_no, {
-        type: detailStore.plan.type === PlanTypeEnum.today ? PlanTypeEnum.all : PlanTypeEnum.today,
-      });
-      break;
-    case TypeEnum.remind:
-      // 发起订阅消息
-      try {
-        await requestSubscribeMessage(SUB_TEMPLATE_IDS);
-      } catch (error) {
-        console.log(error);
-        return;
-      }
-      remindActionSheet();
-      break;
-    case TypeEnum.end:
-      endDateActionSheet();
-      break;
-
-    default:
-      break;
-  }
+  remindActionSheet()
 };
 
 /**
@@ -144,29 +102,18 @@ const remindActionSheet = async () => {
   sheetDataList.push(nextWeek);
   sheetList.push('选择日期和时间');
 
-  try {
-    const res = await Taro.showActionSheet({
-      alertText: '提醒',
-      itemList: sheetList,
-    });
-
-    const index = res.tapIndex;
-
-    if (sheetList[index] === '选择日期和时间') {
-      detailStore.setCalendarModalConfig({
-        show: true,
-        mark: 'remind',
-        showTimeColumn: true,
-        timeCloumnText: laterTxt,
-      });
-    } else {
-      const sheetTime = sheetDataList[index]; // 这个选项对应的时间戳
-      // 设置提醒时间
-      store.editPlan(detailStore.plan.plan_no, {
-        remind_time: sheetTime,
-      });
+  uni.showActionSheet({
+    alertText: '提醒',
+    itemList: sheetList,
+    success: res => {
+      const index = res.tapIndex;
+      if (sheetList[index] === '选择日期和时间') {
+        data.showCalendarModal = true
+      } else {
+        const sheetTime = sheetDataList[index]; // 这个选项对应的时间戳
+      }
     }
-  } catch (error) {}
+  });
 };
 
 /**
@@ -212,17 +159,27 @@ const endDateActionSheet = async () => {
   } catch (error) {}
 };
 
+/** 点击选择时间 */
+const onChioceTime =() => {
+  data.showTime = true
+}
+
 /** 点击日历弹窗返回按钮 */
 const onCalendarModalBack = () => {
-  detailStore.setCalendarModalConfig({
-    show: false,
-  });
-  if (detailStore.calendarModalConfig.mark === 'end') {
-    endDateActionSheet();
-  } else if (detailStore.calendarModalConfig.mark === 'remind') {
-    remindActionSheet();
-  }
+  data.showCalendarModal = false;
+  remindActionSheet();
 };
+
+const onPickerTimeBack= () => {
+  data.showTime = false
+  data.showCalendarModal = true
+}
+
+const onPickerTimeClose= () => {
+  data.showTime = false
+}
+
+const { showCalendarModal, showTime } = toRefs(data)
 </script>
 
 <style lang="scss">
