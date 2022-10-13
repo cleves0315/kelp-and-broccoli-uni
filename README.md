@@ -58,3 +58,5 @@ $ yarn global add @tarojs/cli
 # OR 安装了 cnpm，使用 cnpm 安装 CLI
 $ cnpm install -g @tarojs/cli
 ```
+
+- onTouchMove 卡顿问题 https://github.com/NervJS/taro/issues/10540
