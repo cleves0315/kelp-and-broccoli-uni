@@ -36,7 +36,7 @@ $themeGreen: #07b45b; // 主题绿
   .head {
     display: flex;
     align-items: center;
-    padding: 20px 40px;
+    padding: 20rpx 40rpx;
 
     &.touch {
       background-color: #ecf0f1;
@@ -44,15 +44,15 @@ $themeGreen: #07b45b; // 主题绿
   }
   .head-title {
     flex: 1;
-    margin-left: 30px;
-    font-size: 40px;
+    margin-left: 30rpx;
+    font-size: 40rpx;
     font-weight: 700;
   }
 
   .ident-wrap {
     display: flex;
-    width: 50px;
-    height: 50px;
+    width: 50rpx;
+    height: 50rpx;
     align-items: center;
     justify-content: center;
   }

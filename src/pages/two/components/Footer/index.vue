@@ -79,12 +79,12 @@ $themeGreen: #07b45b; // 主题绿
   bottom: 0;
   display: flex;
   align-items: center;
-  padding: 20px 40px;
+  padding: 20rpx 40rpx;
 
   .content {
     flex: 1;
     color: #767678;
-    font-size: 28px;
+    font-size: 28rpx;
     text-align: center;
 
     &.finished {
@@ -93,8 +93,8 @@ $themeGreen: #07b45b; // 主题绿
   }
 
   .del-btn {
-    width: 40px;
-    height: 40px;
+    width: 40rpx;
+    height: 40rpx;
     background-repeat: no-repeat;
     background-size: 100% 100%;
     background-image: url(./del.svg);

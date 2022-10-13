@@ -48,10 +48,10 @@ const { focus, value, touching } = toRefs(data);
 $overdueRed: #d03c35; // 过期红
 $themeGreen: #07b45b; // 主题绿
 
-.todo-list .operation {
+.operation {
   display: flex;
   align-items: center;
-  padding: 30px 40px;
+  padding: 30rpx 40rpx;
 
   &.touch {
     background-color: #ecf0f1;
@@ -59,14 +59,14 @@ $themeGreen: #07b45b; // 主题绿
 
   .icon-wrap {
     display: flex;
-    width: 50px;
-    height: 50px;
+    width: 50rpx;
+    height: 50rpx;
     align-items: center;
     justify-content: center;
   }
   .add-icon {
-    width: 32px;
-    height: 32px;
+    width: 32rpx;
+    height: 32rpx;
     position: relative;
 
     &::after,
@@ -75,8 +75,8 @@ $themeGreen: #07b45b; // 主题绿
       position: absolute;
       top: 50%;
       width: 100%;
-      height: 5px;
-      border-radius: 200px;
+      height: 5rpx;
+      border-radius: 200rpx;
       background-color: $themeGreen;
     }
 
@@ -90,8 +90,8 @@ $themeGreen: #07b45b; // 主题绿
 
   .operation-text {
     flex: 1;
-    margin-left: 30px;
-    font-size: 30px;
+    margin-left: 30rpx;
+    font-size: 30rpx;
   }
 
   .input-placeholder,

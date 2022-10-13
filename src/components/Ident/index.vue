@@ -31,16 +31,16 @@ $overdueRed: #d03c35; // 过期红
 $themeGreen: #07b45b; // 主题绿
 
 .ident {
-  width: 50px;
-  height: 50px;
+  width: 50rpx;
+  height: 50rpx;
   overflow: hidden;
   border-radius: 50%;
   box-sizing: border-box;
-  border: 4px solid #8d8d8d;
+  border: 4rpx solid #8d8d8d;
 
   &.small {
-    width: 40px;
-    height: 40px;
+    width: 40rpx;
+    height: 40rpx;
   }
 
   &.checked {

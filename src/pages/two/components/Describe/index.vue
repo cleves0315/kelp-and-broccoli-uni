@@ -14,18 +14,18 @@
 
 <style lang="scss">
 .describe-wrap {
-  padding: 0 40px;
+  padding: 0 40rpx;
 
   .describe {
     width: 100%;
-    min-height: 180px;
-    font-size: 30px;
-    padding: 30px 0;
+    min-height: 180rpx;
+    font-size: 30rpx;
+    padding: 30rpx 0;
     color: #767678;
-    border-bottom: 2px solid #ededed;
+    border-bottom: 2rpx solid #ededed;
 
     textarea {
-      font-size: 30px;
+      font-size: 30rpx;
     }
   }
   .textarea-placeholder,

@@ -53,8 +53,8 @@ const { touching } = toRefs(data);
 
 <style lang="scss">
 .list-item {
-  height: 110px;
-  padding: 0 40px;
+  height: 110rpx;
+  padding: 0 40rpx;
   overflow: hidden;
   box-sizing: border-box;
   color: #767678;
@@ -69,7 +69,7 @@ const { touching } = toRefs(data);
     align-items: center;
     height: inherit;
     color: inherit;
-    border-bottom: 2px solid #ededed;
+    border-bottom: 2rpx solid #ededed;
 
     &.no-line {
       border-bottom: unset;
@@ -79,37 +79,37 @@ const { touching } = toRefs(data);
   .icon-wrap {
     display: flex;
     flex-shrink: 0;
-    width: 50px;
-    height: 50px;
-    margin-right: 40px;
+    width: 50rpx;
+    height: 50rpx;
+    margin-right: 40rpx;
 
     .icon {
       display: block;
-      width: 36px;
-      height: 36px;
+      width: 36rpx;
+      height: 36rpx;
       margin: auto;
     }
   }
 
   .content-wrap {
     flex: 1;
-    font-size: 30px;
+    font-size: 30rpx;
     color: inherit;
 
     .list-item-content {
       color: inherit;
-      font-size: 30px;
+      font-size: 30rpx;
     }
     .list-item-subtitle {
       color: inherit;
-      font-size: 24px;
+      font-size: 24rpx;
     }
   }
 
   .operate-wrap {
     position: relative;
-    width: 50px;
-    height: 50px;
+    width: 50rpx;
+    height: 50rpx;
     flex-shrink: 0;
 
     &::before,
@@ -119,8 +119,8 @@ const { touching } = toRefs(data);
       top: 50%;
       right: 0;
       width: 45%;
-      height: 2px;
-      border-radius: 999px;
+      height: 2rpx;
+      border-radius: 999rpx;
       background: #7c7c80;
     }
     &::before {

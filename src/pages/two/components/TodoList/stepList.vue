@@ -28,10 +28,10 @@ const { touching } = toRefs(data);
 $overdueRed: #d03c35; // 过期红
 $themeGreen: #07b45b; // 主题绿
 
-.todo-list .step {
+.step {
   display: flex;
   align-items: center;
-  padding: 20px 40px;
+  padding: 20rpx 40rpx;
 
   &.touch {
     background-color: #ecf0f1;
@@ -39,19 +39,19 @@ $themeGreen: #07b45b; // 主题绿
 
   .ident-wrap {
     display: flex;
-    width: 50px;
+    width: 50rpx;
     justify-content: center;
   }
   .step-title {
     flex: 1;
-    margin-left: 30px;
-    font-size: 32px;
+    margin-left: 30rpx;
+    font-size: 32rpx;
   }
 
   .del-btn-wrap {
     position: relative;
-    width: 50px;
-    height: 50px;
+    width: 50rpx;
+    height: 50rpx;
   }
   .del-btn::after,
   .del-btn::before {
@@ -60,8 +60,8 @@ $themeGreen: #07b45b; // 主题绿
     top: 50%;
     right: 0;
     width: 48%;
-    height: 2px;
-    border-radius: 999px;
+    height: 2rpx;
+    border-radius: 999rpx;
     background: #7c7c80;
   }
   .del-btn::after {
