@@ -60,6 +60,7 @@
     "@dcloudio/uni-stacktracey": "^3.0.0-alpha-3060420220922001",
     "@dcloudio/vite-plugin-uni": "^3.0.0-alpha-3060420220922001",
     "@types/node": "^18.8.4",
+    "@types/wechat-miniprogram": "^3.4.1",
     "prettier": "2.7.1",
     "sass": "^1.55.0",
     "sass-loader": "10.1.1",
