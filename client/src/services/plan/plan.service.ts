@@ -15,8 +15,8 @@ class PlanService {
   public updatePlan = (plan: IPlan) =>
     request<null>('planinfo', { action: 'update', data: { plan } }, '', false);
 
-  public getTodayBack = () => {
-    return request<string>('planinfo', { action: 'today_back' });
+  public getTodayBgImg = () => {
+    return request<string>('planinfo', { action: 'today_bg_img' });
   };
 }
 

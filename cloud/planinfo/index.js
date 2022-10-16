@@ -48,8 +48,8 @@ exports.main = async (event) => {
       return await delPlan(event, db);
     case "finish_plan_list":
       return await finish_plan_list(event, db);
-    case "today_back":
-      return await today_back(event, db);
+    case "today_bg_img":
+      return await today_bg_img(event, db);
   }
 };
 
@@ -475,7 +475,7 @@ async function finish_plan_list(event, db) {
 /**
  * 获取"我的一天"计划列表背景图
  */
-const today_back = async (event, db) => {
+const today_bg_img = async (event, db) => {
   try {
     // { logo, remark, url, describe }
     const { data } = await db

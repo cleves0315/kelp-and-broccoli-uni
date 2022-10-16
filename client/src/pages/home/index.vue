@@ -14,7 +14,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onBeforeMount, onMounted, reactive, toRefs } from 'vue';
+import { reactive, toRefs } from 'vue';
 import Headers from './components/Header/index.vue';
 import Banner from './components/Banner/index.vue';
 import Contents from './components/Contents/index.vue';
@@ -23,8 +23,10 @@ import { globalService, planService, userService } from '@/services';
 import { usePlanStore } from '@/stores/plan';
 import { getGlobalData, initCloud, setGlobalData } from '@/utils/common';
 import { PlanTypeEnum } from '@/constants/enum';
+import { onLoad, onShow } from '@dcloudio/uni-app';
 
 export interface State {
+  toBack: boolean;
   footerBtnTxt: string;
   day?: number;
   finishCount: number;
@@ -34,13 +36,14 @@ export interface State {
 const store = usePlanStore();
 
 const data = reactive<State>({
+  toBack: false,
   footerBtnTxt: '',
   day: 1,
   finishCount: 0,
   todayBg: '',
 });
 
-const onReady = async () => {
+const init = async () => {
   const userId = uni.getStorageSync('user_id');
   uni.showLoading({ title: '加载中...', mask: true });
 
@@ -49,23 +52,25 @@ const onReady = async () => {
     setGlobalData({ user_id: data });
     uni.setStorageSync('user_id', data);
 
-    onReady();
+    init();
     return;
   } else {
     setGlobalData({ user_id: userId });
   }
 
-  await Promise.all([fetchUserDay(), fetchPlanList(), fetchTodayBack()]);
+  fetchUserDay();
+  fetchPlanList();
+  fetchTodayBgImg();
   uni.hideLoading();
 };
 
-onBeforeMount(() => {
+onLoad(() => {
   initCloud();
-  onReady();
+  init();
 });
 
-onMounted(() => {
-  if (getGlobalData('user_id')) {
+onShow(() => {
+  if (data.toBack) {
     // 获取最新天数和计划
     fetchUserDay();
     fetchPlanList();
@@ -83,8 +88,8 @@ const fetchPlanList = async () => {
   data.finishCount = getFinishCount();
 };
 
-const fetchTodayBack = async () => {
-  const url = await planService.getTodayBack();
+const fetchTodayBgImg = async () => {
+  const url = await planService.getTodayBgImg();
   data.todayBg = url;
   setGlobalData({
     todayBack: url,
@@ -103,6 +108,7 @@ const getTodayPercentage = () => {
 };
 
 const intoPlanList = () => {
+  data.toBack = true;
   uni.navigateTo({
     url: `/pages/plan-list/index?type=${PlanTypeEnum.all}`,
   });
