@@ -5,7 +5,8 @@
     @touchmove="handleTouchMove"
     @touchend="handleTouchEnd"
   >
-    <view
+    <div
+      id="planRef"
       ref="planRef"
       class="plan-item-wrap"
       :class="{ moving: moving }"
@@ -42,7 +43,7 @@
           </div>
         </div>
       </div>
-    </view>
+    </div>
     <div
       class="delete-wrap"
       :class="{ moving: moving }"
@@ -57,7 +58,7 @@
 <script lang="ts" setup>
 import { IPlan } from '@/types/plan';
 import Ident from '@/components/Ident/index.vue';
-import { ref, reactive, toRefs, defineProps, watch, onBeforeMount } from 'vue';
+import { ref, reactive, toRefs, defineProps, watch, onBeforeMount, onMounted, getCurrentInstance } from 'vue';
 
 import sunlight from '@/assets/plan/sunlight.svg';
 // import repeatLive from '@/assets/plan/repeat_live.svg';
@@ -69,6 +70,7 @@ import bell from '@/assets/plan/bell.svg';
 import delSvg from '@/assets/del_white.svg';
 import { usePlanStore } from '@/stores/plan';
 import { PlanTypeEnum } from '@/constants/enum';
+import { onLoad } from '@dcloudio/uni-app';
 
 export type PlantItemProps = {
   plan: IPlan;
@@ -78,7 +80,6 @@ export type PlantItemProps = {
 const props = defineProps<PlantItemProps>();
 const { plan } = props;
 
-const planRef = ref(null) as any;
 const store = usePlanStore();
 
 const data = reactive({
@@ -101,13 +102,14 @@ let touchX = 0,
   startX = 0,
   domHeight = 0; // 单个元素节点高度px
 
-onBeforeMount(() => {
-  // 获取 DomRect
-  // Taro小程序环境下这里必须延迟才能获取到
-  setTimeout(async () => {
-    const { height } = await planRef?.value?.getBoundingClientRect();
-    domHeight = height;
-  }, 500);
+onMounted(() => {
+  const inst = getCurrentInstance();
+  const query = uni.createSelectorQuery().in(inst);
+  query.select('#planRef').boundingClientRect();
+  query.exec(([rect]) => {
+    // console.log('rect: ', rect);
+    domHeight = rect.height;
+  });
 });
 
 watch(
@@ -220,6 +222,7 @@ const handleTouchMove = (e) => {
 };
 
 const handleTouchEnd = (e) => {
+  console.log('domHeight: ', domHeight);
   const { clientX } = e.changedTouches[0];
   const diff = clientX - touchX;
 

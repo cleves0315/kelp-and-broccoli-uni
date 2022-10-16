@@ -1,7 +1,10 @@
 <template>
-  <div class="plan-list" :class="{ hidden: !props.visibility }">
-    <!-- :style="{ height: _height !== null ? `${_height}rpx` : 'auto' }" -->
-    <div ref="planListRef">
+  <div
+    class="plan-list"
+    :class="{ hidden: !props.visibility }"
+    :style="{ height: _height !== null ? `${_height}px` : 'auto' }"
+  >
+    <div id="planListRef">
       <template v-for="plan in props.list" :key="plan.plan_no">
         <PlanItem id="planItem" ref="planItem" :plan="plan" />
       </template>
@@ -11,7 +14,7 @@
 
 <script lang="ts" setup>
 import { IPlan } from '@/types/plan';
-import { reactive, defineProps, ref, onBeforeMount } from 'vue';
+import { reactive, defineProps, onMounted, getCurrentInstance, toRefs } from 'vue';
 import PlanItem from '../PlanItem/index.vue';
 
 export interface Props {
@@ -19,7 +22,6 @@ export interface Props {
   visibility?: boolean;
 }
 
-const planListRef = ref(null) as any;
 const props = withDefaults(defineProps<Props>(), {
   visibility: true,
 });
@@ -28,41 +30,35 @@ const data = reactive({
   _height: null,
 });
 
-onBeforeMount(() => {
-  // 获取 DomRect
-  // Taro小程序环境下这里必须延迟才能获取到
-  setTimeout(() => {
-    getListHeight();
-  }, 500);
+onMounted(() => {
+  const inst = getCurrentInstance();
+  const query = uni.createSelectorQuery().in(inst);
+  query.select('#planListRef').boundingClientRect();
+  query.exec(([rect]) => {
+    data._height = rect.height;
+  });
 });
 
-const getListHeight = async () => {
-  console.log('planListRef?.value: ', planListRef?.value);
-
-  // const { height } = await planListRef?.value?.getBoundingClientRect();
-  // data._height = height;
-};
+const { _height } = toRefs(data);
 </script>
 
 <style lang="scss">
-.plan-list-page {
-  .plan-list {
-    padding: 0 20px;
-    box-sizing: border-box;
-    overflow: hidden;
-    transition: height 0.3s ease;
+.plan-list {
+  padding: 0 20rpx;
+  box-sizing: border-box;
+  overflow: hidden;
+  transition: height 0.3s ease;
 
-    &.hidden {
-      height: 0 !important;
-    }
+  &.hidden {
+    height: 0 !important;
   }
+}
 
-  // 关闭滚动条样式
-  ::-webkit-scrollbar {
-    display: none;
-    width: 0;
-    height: 0;
-    color: transparent;
-  }
+// 关闭滚动条样式
+::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+  color: transparent;
 }
 </style>

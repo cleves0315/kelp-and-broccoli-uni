@@ -7,7 +7,7 @@
     <CustomNavigationBar :title="naviBarTitle()" :bgColor="decorateBgColor()" :onBack="handleNaviBarBack" />
     <Headers :title="naviBarTitle()" />
     <PlanList :list="todoList()" />
-    <MarkBtn class-name="mark-btn" :direction="checkFinish" @click="handleClickMark" />
+    <MarkBtn class-name="mark-btn" :direction="checkFinish" :onClick="handleClickMark" />
     <PlanList :visibility="checkFinish" :list="finisheList()" />
     <FooterInput :bgColor="decorateBgColor()" inputPlaceTxt="添加任务" :confirm="handleConfrim" />
   </div>
@@ -19,7 +19,7 @@ import MarkBtn from './components/MarkBtn/index.vue';
 import FooterInput from '@/components/FooterInput/index.vue';
 import CustomNavigationBar from '@/components/CustomNavigationBar/index.vue';
 import PlanList from './components/PlanList/index.vue';
-import { getCurrentInstance, onBeforeMount, reactive, toRefs } from 'vue';
+import { onBeforeMount, reactive, toRefs } from 'vue';
 import { usePlanStore } from '@/stores/plan';
 import { IPlan } from '@/types/plan';
 import { PlanTypeEnum } from '@/constants/enum';
@@ -96,6 +96,7 @@ const { backUrl, checkFinish } = toRefs(data);
   padding-top: 30rpx;
   padding-bottom: 200rpx;
   -webkit-overflow-scrolling: touch;
+  box-sizing: border-box;
   background: no-repeat #70c59e 0/100% 100%;
 
   &.no-scroll {
