@@ -31,7 +31,6 @@
 </template>
 
 <script lang="ts" setup>
-import { isIphone } from '@/utils/common';
 import { defineProps, toRefs, reactive } from 'vue';
 import IphoneBottomSideAdapter from '../IphoneBottomSideAdapter/index.vue';
 export interface Props {
@@ -44,7 +43,6 @@ export interface Props {
 }
 export interface Data {
   showMask: boolean;
-  isPhone: boolean;
   isFocus: boolean;
   cursorSpacing: number; // 获取键盘高度
   value: string; // 设置输入框的值
@@ -62,7 +60,6 @@ const {
 
 const data: Data = reactive({
   showMask: false,
-  isPhone: isIphone(),
   cursorSpacing: 0,
   value: '',
   isFocus: false,
@@ -97,7 +94,7 @@ const handleKeyboardheightchange = (e) => {
   }
 };
 
-const { showMask, isPhone, cursorSpacing, value, isFocus } = toRefs(data);
+const { showMask, cursorSpacing, value, isFocus } = toRefs(data);
 </script>
 
 <style lang="scss">
