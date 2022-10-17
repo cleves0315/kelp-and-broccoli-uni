@@ -14,7 +14,7 @@
 
 <script lang="ts" setup>
 import { IPlan } from '@/types/plan';
-import { reactive, defineProps, onMounted, getCurrentInstance, toRefs } from 'vue';
+import { reactive, defineProps, onMounted, getCurrentInstance, toRefs, watch } from 'vue';
 import PlanItem from '../PlanItem/index.vue';
 
 export interface Props {
@@ -22,18 +22,32 @@ export interface Props {
   visibility?: boolean;
 }
 
+const inst = getCurrentInstance();
+const query = uni.createSelectorQuery().in(inst);
+query.select('#planListRef').boundingClientRect();
+
 const props = withDefaults(defineProps<Props>(), {
   visibility: true,
 });
+
+watch(
+  () => props.list,
+  (newVal) => {
+    if (newVal) {
+      // 获取最新节点高度
+      query.exec(([rect]) => {
+        data._height = rect.height;
+      });
+    }
+  },
+);
 
 const data = reactive({
   _height: null,
 });
 
 onMounted(() => {
-  const inst = getCurrentInstance();
-  const query = uni.createSelectorQuery().in(inst);
-  query.select('#planListRef').boundingClientRect();
+  // 获取节点高度
   query.exec(([rect]) => {
     data._height = rect.height;
   });
