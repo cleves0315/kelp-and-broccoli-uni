@@ -9,6 +9,9 @@
       "style": {
         "navigationStyle": "custom"
       }
+    },
+    {
+      "path": "pages/plan-detail/index"
     }
   ],
   "globalStyle": {

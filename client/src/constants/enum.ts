@@ -32,3 +32,21 @@ export enum PlanTypeEnum {
   all = 'all',
   today = 'today',
 }
+
+/**
+ * 左侧icon图标
+ *  life 我的一天
+ *  remind 提醒我
+ *  end 截止日期
+ *  repeat 重复
+ */
+export enum PlanIconTypeEnum {
+  /** 我的一天 */
+  life = 'life',
+  /** 提醒我 */
+  remind = 'remind',
+  /** 截止日期 */
+  end = 'end',
+  /** 重复 */
+  // repeat = 'repeat',
+}

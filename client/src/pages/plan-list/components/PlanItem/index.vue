@@ -243,7 +243,7 @@ const setDistance = (num: number) => {
 };
 
 const onChangeFinish = () => {
-  store.editPlan(
+  store.updatePlan(
     plan.plan_no,
     {
       finish_date: Date.now(),
