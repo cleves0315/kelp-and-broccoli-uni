@@ -62,3 +62,8 @@ $ cnpm install -g @tarojs/cli
 - onTouchMove 卡顿问题 https://github.com/NervJS/taro/issues/10540
 
 - 公用用具函数 requestSubscribeMessage 需要测试下自定义Promise函数逻辑
+
+- planlist bug处理 [done]
+- plandetail 页面 [done]
+  - stepList bug处理（touching）
+  - CalendarModal bug处理
