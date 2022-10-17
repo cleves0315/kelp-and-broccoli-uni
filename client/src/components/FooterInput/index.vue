@@ -1,18 +1,20 @@
 <template>
   <div
     class="footer-input"
-    :class="{ iphone: isPhone, 'change-height': isFocus }"
-    :style="{ background: bgColor, bottom: `${cursorSpacing}px` }"
+    :class="{ 'changing-height': isFocus }"
+    :style="{ backgroundColor: bgColor, bottom: `${cursorSpacing}px` }"
   >
     <div v-if="showMask" class="footer-input-mask"></div>
-    <div class="container" :class="{ 'changing-height': isFocus }">
+
+    <div class="container">
+      <div class="placeholder-mask" :class="{ focus: isFocus }">
+        {{ value ? '' : inputPlaceTxt }}
+      </div>
       <input
         class="input-box"
-        :class="{ 'input-changing-height': isFocus }"
-        :value="value"
-        :placeholder="inputPlaceTxt"
+        :class="{ 'input-changing': isFocus }"
+        v-model="value"
         :maxlength="maxlength"
-        :placeholderStyle="isFocus ? 'color: #767678;' : 'color: #fefefe;'"
         :adjust-position="adjustPosition"
         @focus="handleOnFocus"
         @blur="handleBlur"
@@ -24,12 +26,14 @@
         <div v-else class="focus-icon"></div>
       </div>
     </div>
+    <IphoneBottomSideAdapter />
   </div>
 </template>
 
 <script lang="ts" setup>
 import { isIphone } from '@/utils/common';
 import { defineProps, toRefs, reactive } from 'vue';
+import IphoneBottomSideAdapter from '../IphoneBottomSideAdapter/index.vue';
 export interface Props {
   bgColor?: string; // 背景颜色
   inputPlaceTxt?: string; // input[placeholder]属性值
@@ -46,6 +50,7 @@ export interface Data {
   value: string; // 设置输入框的值
 }
 
+const props = defineProps<Props>();
 const {
   bgColor,
   inputPlaceTxt = '添加任务',
@@ -53,7 +58,7 @@ const {
   adjustPosition = false,
   // inputPlaceIcon = './add.svg',
   confirm = () => {},
-} = defineProps<Props>();
+} = props;
 
 const data: Data = reactive({
   showMask: false,
@@ -109,6 +114,17 @@ const { showMask, isPhone, cursorSpacing, value, isFocus } = toRefs(data);
     padding-bottom: 30rpx;
   }
 
+  &.changing-height {
+    background: #fefefe;
+    border-radius: 20rpx 20rpx 0 0;
+    box-shadow: 0 -10rpx 20rpx -10rpx rgba(0, 0, 0, 0.3);
+
+    .input-changing {
+      color: #767678;
+      background: #fefefe;
+    }
+  }
+
   .footer-input-mask {
     position: fixed;
     top: 0;
@@ -117,42 +133,37 @@ const { showMask, isPhone, cursorSpacing, value, isFocus } = toRefs(data);
     bottom: 0;
   }
 
-  /**
-  * 激活键盘时
-  */
-  &.change-height {
-    padding-bottom: 0;
-  }
-
   .container {
     position: relative;
     padding: 10rpx 20rpx;
+  }
 
-    &.changing-height {
-      background: #fefefe;
-      border-radius: 20rpx 20rpx 0 0;
-      box-shadow: 0 -10rpx 20rpx -10rpx rgba(0, 0, 0, 0.3);
+  .placeholder-mask {
+    position: absolute;
+    left: 124rpx;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #fefefe;
+    font-size: 30rpx;
+    z-index: 1;
 
-      .input-changing-height {
-        color: #767678;
-        background: #fefefe;
-      }
+    &.focus {
+      color: #767678;
     }
   }
 
   .input-box {
     position: relative;
-    display: flex;
-    align-items: center;
+    width: 100%;
     height: 120rpx;
     line-height: 120rpx;
     border-radius: 30rpx;
     color: #fefefe;
-    transition: 0;
     padding-right: 30rpx;
     padding-left: 104rpx;
     font-size: 30rpx;
-    background: rgba(0, 0, 0, 0.56);
+    box-sizing: border-box;
+    background-color: rgba(0, 0, 0, 0.56);
   }
 
   /* 激活键盘时end */
@@ -179,7 +190,7 @@ const { showMask, isPhone, cursorSpacing, value, isFocus } = toRefs(data);
     }
   }
 
-  .input-changing-height {
+  .input-changing {
     input::-webkit-input-placeholder {
       color: #767678;
     }

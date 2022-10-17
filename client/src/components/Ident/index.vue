@@ -1,14 +1,13 @@
 <template>
-  <view class="ident" :class="{ checked: checked, [size]: size }" @click="handleTap">
-    <view :class="checked ? 'ident-checked' : 'ident-hidden'"></view>
-  </view>
+  <div class="ident" :class="{ checked: checked, [size]: size }" @click="handleTap">
+    <div :class="checked ? 'ident-checked' : 'ident-hidden'"></div>
+  </div>
 </template>
 
 <script lang="ts" setup>
 import { defineProps } from 'vue';
 export interface Props {
   checked?: boolean; // 当前是否选中
-  // checkedBackgroundColor?: string; // 选中后的背景颜色
   onClick?: () => void;
   size?: 'normal' | 'small';
 }

@@ -1,5 +1,5 @@
 <template>
-  <view class="iphone-bottom-side-adapter" :class="{ iphonex: iphonex }"> </view>
+  <div class="iphone-bottom-side-adapter" :class="{ iphonex: iphonex }"></div>
 </template>
 
 <script lang="ts" setup>
@@ -12,7 +12,7 @@ const iphonex = ref(isIphone());
 <style lang="scss">
 .iphone-bottom-side-adapter {
   &.iphonex {
-    height: 68rpx;
+    height: 30rpx;
   }
 }
 </style>
