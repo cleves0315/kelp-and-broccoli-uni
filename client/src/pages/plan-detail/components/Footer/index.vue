@@ -1,15 +1,19 @@
 <template>
   <div class="plan-detial-footer">
-    <div class="content" :class="{ finished: detailStore.plan.is_finish }">
-      {{ beforeTime() }} {{ formatDate() }}
+    <div class="plan-detial-footer-wrapper">
+      <div class="content" :class="{ finished: detailStore.plan.is_finish }">
+        {{ beforeTime() }} {{ formatDate() }}
+      </div>
+      <div class="del-btn" @click="handleClick"></div>
     </div>
-    <div class="del-btn" @click="handleClick"></div>
+    <IphoneBottomSideAdapter />
   </div>
 </template>
 
 <script lang="ts" setup>
 import { usePlanStore } from '@/stores/plan';
 import { usePlanDetailStore } from '@/stores/planDetail';
+import IphoneBottomSideAdapter from '@/components/IphoneBottomSideAdapter/index.vue';
 
 const store = usePlanStore();
 const detailStore = usePlanDetailStore();
@@ -89,9 +93,13 @@ const handleClick = async () => {
   left: 0;
   right: 0;
   bottom: 0;
-  display: flex;
-  align-items: center;
-  padding: 20rpx 40rpx;
+  background-color: #fff;
+
+  .plan-detial-footer-wrapper {
+    display: flex;
+    align-items: center;
+    padding: 20rpx 40rpx;
+  }
 
   .content {
     flex: 1;

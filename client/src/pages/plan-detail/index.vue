@@ -161,8 +161,8 @@ const remindActionSheet = async () => {
     const index = res.tapIndex;
 
     if (sheetList[index] === '选择日期和时间') {
+      detailStore.showCalendarModal(true);
       detailStore.setCalendarModalConfig({
-        show: true,
         mark: 'remind',
         showTimeColumn: true,
         timeCloumnText: laterTxt,
@@ -216,8 +216,8 @@ const endDateActionSheet = async () => {
         break;
       case 3:
         // 选择日期
+        detailStore.showCalendarModal(true);
         detailStore.setCalendarModalConfig({
-          show: true,
           mark: 'end',
           showTimeColumn: false,
         });
@@ -228,9 +228,7 @@ const endDateActionSheet = async () => {
 
 /** 点击日历弹窗返回按钮 */
 const onCalendarModalBack = () => {
-  detailStore.setCalendarModalConfig({
-    show: false,
-  });
+  detailStore.showCalendarModal(false);
   if (detailStore.calendarModalConfig.mark === 'end') {
     endDateActionSheet();
   } else if (detailStore.calendarModalConfig.mark === 'remind') {

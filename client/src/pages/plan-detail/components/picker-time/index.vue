@@ -125,7 +125,7 @@ watch(
 
 const handleClose = () => {
   detailStore.setPickerTimeConfig({ show: false });
-  detailStore.setCalendarModalConfig({ show: false, showTimeColumn: false, timeCloumnText: '' });
+  // detailStore.setCalendarModalConfig({ showTimeColumn: false, timeCloumnText: '' });
   onClose?.();
 };
 const handelTouchStart = (e) => {
@@ -159,9 +159,9 @@ const handleOnBack = () => {
   const pickTime = `${pickResultH}:${pickResultM}`;
 
   detailStore.setPickerTimeConfig({ show: false });
+  detailStore.showCalendarModal(true);
   detailStore.setCalendarModalConfig({
-    show: true,
-    mark: 'remind',
+    // mark: 'remind',
     showTimeColumn: true,
     timeCloumnText: pickTime,
   });

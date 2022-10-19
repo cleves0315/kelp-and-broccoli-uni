@@ -1,6 +1,6 @@
 <template>
   <div class="todo-list">
-    <div class="head" :class="{ touch: touching }" @touchstart="touching = true" @touchend="touching = false">
+    <div class="head">
       <div class="ident-wrap">
         <Ident :checked="detailStore.plan.is_finish" :onClick="handleChangeState" />
       </div>

@@ -1,13 +1,10 @@
 <template>
-  <div
-    class="calendar-box"
-    :class="{ hide: !detailStore.calendarModalConfig.show }"
-    @click.self="handleClose"
-  >
+  <div class="calendar-box" :class="{ hide: !detailStore.calendarModalConfig.show }" @click="handleClose">
     <div
       class="container"
       :class="{ hidebox: !detailStore.calendarModalConfig.show }"
       :style="{ bottom: `-${bottom}px` }"
+      @click.stop
       @touchstart="handelTouchStart"
       @touchmove="handelTouchMove"
       @touchend.stop="handelTouchEnd"
@@ -70,7 +67,6 @@ watch(
       const today = new Date();
 
       detailStore.setCalendarModalConfig({
-        show: true,
         choiceDate: {
           year: today.getFullYear(),
           month: today.getMonth() + 1,
@@ -106,7 +102,7 @@ const handelTouchEnd = (e) => {
 };
 
 const handleClose = () => {
-  detailStore.setCalendarModalConfig({ show: false, showTimeColumn: false, timeCloumnText: '' });
+  detailStore.showCalendarModal(false);
   onClose?.();
 };
 
@@ -136,12 +132,12 @@ const handleTapSetup = () => {
       closing_date: lastTime,
     });
   }
-  detailStore.setCalendarModalConfig({ show: false });
+  detailStore.showCalendarModal(false);
 };
 
 const handleOnChoiceDate = (value: SelectDay) => {
   choiceDate = value;
-  detailStore.setCalendarModalConfig({ show: true, choiceDate: value });
+  detailStore.setCalendarModalConfig({ choiceDate: value });
 };
 
 /** 底部选择时间栏touch手势 */
@@ -154,7 +150,7 @@ const choiceLineTouchEnd = () => {
 
 /** 点击选择时间栏 */
 const handleOnChoiceTime = () => {
-  detailStore.setCalendarModalConfig({ show: false });
+  detailStore.showCalendarModal(false);
   detailStore.setPickerTimeConfig({ show: true });
   chioceTime?.(choiceDate);
 };
