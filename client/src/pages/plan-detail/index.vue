@@ -12,7 +12,6 @@
 </template>
 
 <script lang="ts" setup>
-import { onUnmounted } from 'vue';
 import CalendarModal from './components/CalendarModal/index.vue';
 import TodoList from './components/TodoList/index.vue';
 import List from './components/List/index.vue';
@@ -24,7 +23,7 @@ import { PlanTypeEnum, PlanIconTypeEnum } from '@/constants/enum';
 import { requestSubscribeMessage } from '@/utils/common';
 import { SUB_TEMPLATE_IDS } from '@/constants';
 import PickerTime from './components/picker-time/index.vue';
-import { onLoad } from '@dcloudio/uni-app';
+import { onHide, onLoad, onUnload } from '@dcloudio/uni-app';
 
 export interface Props {
   plan_no: string;
@@ -40,7 +39,13 @@ onLoad(() => {
   detailStore.setPlan(store.planList.find((m) => m.plan_no === plan_no));
 });
 
-onUnmounted(() => {
+onHide(() => {
+  if (detailStore.plan) {
+    store.updatePlan(detailStore.plan.plan_no, detailStore.plan, true);
+  }
+});
+
+onUnload(() => {
   if (detailStore.plan) {
     store.updatePlan(detailStore.plan.plan_no, detailStore.plan, true);
     detailStore.setPlan(undefined);
