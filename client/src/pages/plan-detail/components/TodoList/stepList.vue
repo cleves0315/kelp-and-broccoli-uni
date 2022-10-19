@@ -1,18 +1,16 @@
 <template>
-  <template v-for="step in detailStore.plan.step_list" :key="step.id">
-    <div
-      class="plan-detail-step"
-      :class="{ touch: touching }"
-      @touchstart="touching = true"
-      @touchend="touching = false"
-    >
-      <div class="ident-wrap">
-        <Ident size="small" :checked="step.is_finish" :onClick="() => handleChangeState(step)" />
-      </div>
-      <input class="step-title" :value="step.title" @blur="handleBlur(step.id, $event)" />
-      <div class="del-btn-wrap" @click="handleDelete(step.id)"><div class="del-btn"></div></div>
+  <div
+    class="plan-detail-step"
+    :class="{ touch: touching }"
+    @touchstart="touching = true"
+    @touchend="touching = false"
+  >
+    <div class="ident-wrap">
+      <Ident size="small" :checked="step.is_finish" :onClick="handleChangeState" />
     </div>
-  </template>
+    <input class="step-title" :value="step.title" @blur="handleBlur" />
+    <div class="del-btn-wrap" @click="handleDelete"><div class="del-btn"></div></div>
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -22,31 +20,36 @@ import { usePlanDetailStore } from '@/stores/planDetail';
 import { IStep } from '@/types/plan';
 import { reactive, toRefs } from 'vue';
 
-export interface Props {}
+export interface Props {
+  step: IStep;
+}
 
 const store = usePlanStore();
 const detailStore = usePlanDetailStore();
+
+const props = defineProps<Props>();
+const { step } = props;
 
 const data = reactive({
   focus: false,
   touching: false,
 });
 
-const handleChangeState = (step: IStep) => {
+const handleChangeState = () => {
   store.editStep(detailStore.plan.plan_no, step.id, {
     is_finish: !step.is_finish,
   });
 };
 
-const handleBlur = (stepId: string, e) => {
+const handleBlur = (e) => {
   const value = e.detail.value.trim() as string;
 
-  store.editStep(detailStore.plan.plan_no, stepId, {
+  store.editStep(detailStore.plan.plan_no, step.id, {
     title: value,
   });
 };
 
-const handleDelete = async (stepId: string) => {
+const handleDelete = async () => {
   // 震动
   uni.vibrateShort({});
 
@@ -54,7 +57,7 @@ const handleDelete = async (stepId: string) => {
     itemList: ['删除计划'],
     itemColor: '#EA3927',
     success: () => {
-      store.delStep(detailStore.plan.plan_no, stepId);
+      store.delStep(detailStore.plan.plan_no, step.id);
     },
   });
 };

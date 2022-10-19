@@ -6,7 +6,9 @@
       </div>
       <input class="head-title" :value="detailStore.plan.title" @blur="handleBlur" />
     </div>
-    <StepList />
+    <template v-for="step in detailStore.plan.step_list" :key="step.id">
+      <Step :step="step" />
+    </template>
     <Operation />
   </div>
 </template>
@@ -14,14 +16,12 @@
 <script lang="ts" setup>
 import { reactive, toRefs } from 'vue';
 import Ident from '@/components/Ident/index.vue';
-import StepList from './stepList.vue';
+import Step from './stepList.vue';
 import Operation from './operation.vue';
 import { usePlanStore } from '@/stores/plan';
 import { usePlanDetailStore } from '@/stores/planDetail';
 
-export interface Props {
-  // checkedBackgroundColor?: string; // 选中后的背景颜色
-}
+export interface Props {}
 
 const store = usePlanStore();
 const detailStore = usePlanDetailStore();
