@@ -261,8 +261,8 @@ const intoDetail = () => {
 
 const onDelete = async () => {
   // 两下震动
-  uni.vibrateShort({});
-  setTimeout(() => uni.vibrateShort({}), 200);
+  uni.vibrateShort({ type: 'heavy' } as any);
+  setTimeout(() => uni.vibrateShort({ type: 'heavy' } as any), 200);
 
   try {
     await uni.showActionSheet({

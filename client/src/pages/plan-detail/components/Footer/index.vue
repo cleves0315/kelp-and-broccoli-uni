@@ -73,8 +73,8 @@ const formatDate = () => {
 
 const handleClick = async () => {
   // 两下震动
-  uni.vibrateShort({});
-  setTimeout(() => uni.vibrateShort({}), 200);
+  uni.vibrateShort({ type: 'heavy' } as any);
+  setTimeout(() => uni.vibrateShort({ type: 'heavy' } as any), 200);
 
   uni.showActionSheet({
     itemList: ['删除计划'],
