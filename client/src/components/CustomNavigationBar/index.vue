@@ -122,6 +122,7 @@ const { height, iconSize, rectHieght, rectTop } = toRefs(data);
     color: #fff;
     text-align: center;
     font-weight: 500;
+    font-size: 32rpx;
   }
 }
 </style>
