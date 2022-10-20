@@ -39,13 +39,6 @@ export const usePlanDetailStore = defineStore('planDetail', {
     },
     setCalendarModalConfig(data: CalendarModalConfig) {
       Object.assign(this.calendarModalConfig, data);
-      // if (data.show) {
-      //   Object.assign(this.calendarModalConfig, data);
-      // } else {
-      //   this.calendarModalConfig = {
-      //     mark: this.calendarModalConfig.mark,
-      //   };
-      // }
     },
     setPickerTimeConfig(data: PickerTimeConfig) {
       if (data.show) {

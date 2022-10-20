@@ -35,7 +35,6 @@ export interface Props {
 }
 
 const { icon, styles, content, subtitle, onClick, onClose, hasLine = true } = defineProps<Props>();
-console.log('hasLine: ', hasLine);
 
 const data = reactive({
   touching: false,

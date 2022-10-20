@@ -70,10 +70,8 @@ export const usePlanStore = defineStore('planList', {
     updatePlan(planNo: string, data: SetPlan, sync: boolean = false) {
       const index = this.planList.findIndex((m) => m.plan_no === planNo);
       if (index > -1) {
-        log('find index: ', index);
         Object.assign(this.planList[index], data);
         sync && planService.updatePlan(this.planList[index]);
-        log('update planList: ', this.planList);
       }
     },
 
