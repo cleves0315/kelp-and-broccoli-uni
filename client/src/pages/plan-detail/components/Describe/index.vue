@@ -4,6 +4,7 @@
       class="describe"
       :autoHeight="true"
       placeholder="添加备注"
+      :cursor-spacing="12"
       :value="detailStore.plan.detail"
       @blur="handleDescribeBlur"
     ></textarea>

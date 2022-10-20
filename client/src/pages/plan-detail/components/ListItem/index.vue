@@ -54,9 +54,12 @@ const { touching } = toRefs(data);
 </script>
 
 <style lang="scss">
+$height: 110rpx;
+$sideSpace: 40rpx;
+
 .list-item {
-  height: 110rpx;
-  padding: 0 40rpx;
+  height: $height;
+  padding-left: $sideSpace;
   overflow: hidden;
   box-sizing: border-box;
   color: #767678;
@@ -84,7 +87,7 @@ const { touching } = toRefs(data);
     flex-shrink: 0;
     width: 50rpx;
     height: 50rpx;
-    margin-right: 40rpx;
+    margin-right: $sideSpace;
 
     .icon {
       display: block;
@@ -111,8 +114,8 @@ const { touching } = toRefs(data);
 
   .operate-wrap {
     position: relative;
-    width: 50rpx;
-    height: 50rpx;
+    width: $height;
+    height: $height;
     flex-shrink: 0;
 
     &::before,
@@ -120,8 +123,8 @@ const { touching } = toRefs(data);
       content: '';
       position: absolute;
       top: 50%;
-      right: 0;
-      width: 45%;
+      right: $sideSpace;
+      width: 22rpx;
       height: 2rpx;
       border-radius: 999rpx;
       background: #7c7c80;
