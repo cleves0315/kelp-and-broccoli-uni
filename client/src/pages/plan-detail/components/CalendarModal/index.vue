@@ -118,7 +118,7 @@ const handleTapSetup = () => {
   const choiceDate = detailStore.calendarModalConfig.choiceDate;
   const mText = Math.floor(choiceDate.month) < 10 ? `0${choiceDate.month}` : choiceDate.month;
   const dText = Math.floor(choiceDate.day) < 10 ? `0${choiceDate.day}` : choiceDate.day;
-  const date = `${choiceDate.year}-${mText}-${dText}`;
+  const date = `${choiceDate.year}/${mText}/${dText}`;
   const curntHour = new Date().getHours() + 4;
   const remindDate = `${date} ${curntHour}:00`;
 

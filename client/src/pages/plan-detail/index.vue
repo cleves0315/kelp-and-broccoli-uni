@@ -23,7 +23,7 @@ import { PlanTypeEnum, PlanIconTypeEnum } from '@/constants/enum';
 import { requestSubscribeMessage } from '@/utils/common';
 import { SUB_TEMPLATE_IDS } from '@/constants';
 import PickerTime from './components/picker-time/index.vue';
-import { onHide, onLoad, onUnload } from '@dcloudio/uni-app';
+import { onHide, onLoad, onShow, onUnload } from '@dcloudio/uni-app';
 
 export interface Props {
   plan_no: string;
@@ -204,7 +204,7 @@ const endDateActionSheet = async () => {
         const y = new Date().getFullYear();
         const m = new Date().getMonth() + 1;
         const d = new Date().getDate();
-        const lastTime = new Date(`${y}-${m}-${d} 23:59:59`).getTime();
+        const lastTime = new Date(`${y}/${m}/${d} 23:59:59`).getTime();
         store.updatePlan(detailStore.plan.plan_no, {
           closing_date: lastTime,
         });
