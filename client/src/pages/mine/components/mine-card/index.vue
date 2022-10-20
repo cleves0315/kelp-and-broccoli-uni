@@ -22,7 +22,7 @@ const handleClick = (type) => {
   switch (type) {
     case 'statistics':
       wx.navigateTo({
-        url: `/pages/tool/tool?type=${type}`,
+        url: `/pages/tool/index?type=${type}`,
       });
       break;
 

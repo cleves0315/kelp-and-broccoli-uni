@@ -15,6 +15,9 @@
     },
     {
       "path": "pages/mine/index"
+    },
+    {
+      "path": "pages/tool/index"
     }
   ],
   "tabBar": {
