@@ -107,7 +107,6 @@ onMounted(() => {
   const query = uni.createSelectorQuery().in(inst);
   query.select('#planRef').boundingClientRect();
   query.exec(([rect]) => {
-    // console.log('rect: ', rect);
     domHeight = rect.height;
   });
 });
@@ -222,7 +221,6 @@ const handleTouchMove = (e) => {
 };
 
 const handleTouchEnd = (e) => {
-  console.log('domHeight: ', domHeight);
   const { clientX } = e.changedTouches[0];
   const diff = clientX - touchX;
 
@@ -264,16 +262,13 @@ const onDelete = async () => {
   uni.vibrateShort({ type: 'heavy' } as any);
   setTimeout(() => uni.vibrateShort({ type: 'heavy' } as any), 200);
 
-  try {
-    await uni.showActionSheet({
-      itemList: ['删除计划'],
-      itemColor: '#EA3927',
-    });
-
-    store.delPlan(plan.plan_no);
-  } catch (error) {
-    console.log(error);
-  }
+  uni.showActionSheet({
+    itemList: ['删除计划'],
+    itemColor: '#EA3927',
+    success: () => {
+      store.delPlan(plan.plan_no);
+    },
+  });
 };
 
 defineExpose({

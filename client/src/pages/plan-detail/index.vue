@@ -64,7 +64,6 @@ const onListClick = async (type: PlanIconTypeEnum) => {
       try {
         await requestSubscribeMessage(SUB_TEMPLATE_IDS);
       } catch (error) {
-        console.log(error);
         return;
       }
       remindActionSheet();
