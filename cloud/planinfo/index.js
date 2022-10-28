@@ -77,6 +77,7 @@ const isValidPlan = (plan) => {
  * 查询结合所有数据
  */
 const getAllData = async (db, name, where = {}) => {
+  const _ = db.command;
   if (!name || typeof name !== 'string') {
     return {
       data: [],
@@ -151,6 +152,7 @@ const resetPlan = async (db) => {
  * 获取计划数据
  */
 const getPlanList = async (event, db) => {
+  const _ = db.command;
   const { user_id } = event.data;
 
   if (!user_id) {
@@ -163,7 +165,8 @@ const getPlanList = async (event, db) => {
 
   try {
     const { data } = await getAllData(db, 'plan_list', {
-      user_id
+      user_id,
+      is_delete: _.not(_.eq(true))
     })
 
     return {
@@ -280,7 +283,11 @@ const delPlan = async (event, db) => {
   }
 
   try {
-    await db.collection("plan_list").where({ plan_no }).remove();
+    await db.collection("plan_list")
+      .where({ plan_no })
+      .update({
+        data: { is_delete: true },
+      });
 
     return {
       code: 1,
