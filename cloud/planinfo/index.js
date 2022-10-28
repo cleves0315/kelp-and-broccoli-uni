@@ -76,7 +76,7 @@ const isValidPlan = (plan) => {
 /**
  * 查询结合所有数据
  */
-const getAllData = async (db, name) => {
+const getAllData = async (db, name, where = {}) => {
   if (!name || typeof name !== 'string') {
     return {
       data: [],
@@ -93,7 +93,7 @@ const getAllData = async (db, name) => {
   // 承载所有读操作的 promise 的数组
   const tasks = []
   for (let i = 0; i < batchTimes; i++) {
-    const promise = db.collection(name).skip(i * MAX_LIMIT).limit(MAX_LIMIT).get()
+    const promise = db.collection(name).where(where).skip(i * MAX_LIMIT).limit(MAX_LIMIT).get()
     tasks.push(promise)
   }
 
@@ -133,7 +133,11 @@ const resetPlan = async (db) => {
       obj.user_id = userIdMap[plan.open_id];
     }
 
-    if (!plan.plan_no || !plan.user_id) {
+    if (!plan.type) {
+      obj.type = plan.organize === 'today' ? 'today' : 'all'
+    }
+
+    if (!plan.plan_no || !plan.user_id || !plan.type) {
       db.collection("plan_list")
         .doc(plan._id)
         .update({
@@ -158,7 +162,9 @@ const getPlanList = async (event, db) => {
   }
 
   try {
-    const { data } = getAllData(db, 'plan_list')
+    const { data } = await getAllData(db, 'plan_list', {
+      user_id
+    })
 
     return {
       code: 1,
