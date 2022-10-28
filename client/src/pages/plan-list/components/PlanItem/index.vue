@@ -14,7 +14,7 @@
     >
       <div class="operation"><Ident :checked="plan.is_finish" :onClick="onChangeFinish" /></div>
       <div class="plan-item-content" @click="intoDetail">
-        <div class="head">{{ plan.title }}</div>
+        <div class="head" :class="{ finish: plan.is_finish }">{{ plan.title }}</div>
         <div class="detail-content">
           <!-- 我的一天 -->
           <view class="tips-block" v-if="plan.type === PlanTypeEnum.today">
@@ -318,6 +318,11 @@ const { liveToday, overIcon, overIconExpired, bookIcon, remindIcon, delIcon, dis
   .head {
     font-size: 32rpx;
     white-space: nowrap;
+
+    &.finish {
+      text-decoration: line-through;
+      color: #757575;
+    }
   }
 
   .detail-content {
