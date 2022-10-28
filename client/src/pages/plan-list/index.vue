@@ -5,10 +5,12 @@
     :style="{ 'background-image': `url(${backUrl})` }"
   >
     <CustomNavigationBar :title="naviBarTitle()" :bgColor="decorateBgColor()" :onBack="handleNaviBarBack" />
-    <Headers :title="naviBarTitle()" />
-    <PlanList :list="todoList()" />
-    <MarkBtn class-name="mark-btn" :direction="checkFinish" :onClick="handleClickMark" />
-    <PlanList :visibility="checkFinish" :list="finisheList()" />
+    <scroll-view scroll-y="true" class="scroll-view">
+      <Headers :title="naviBarTitle()" />
+      <PlanList :list="todoList()" />
+      <MarkBtn class-name="mark-btn" :direction="checkFinish" :onClick="handleClickMark" />
+      <PlanList :visibility="checkFinish" :list="finisheList()" />
+    </scroll-view>
     <FooterInput :bgColor="decorateBgColor()" inputPlaceTxt="添加任务" :confirm="handleConfrim" />
   </div>
 </template>
@@ -92,8 +94,7 @@ const { backUrl, checkFinish } = toRefs(data);
 .plan-list-page {
   height: 100vh;
   overflow-x: hidden;
-  overflow-y: auto;
-  padding-top: 30rpx;
+  overflow-y: hidden;
   padding-bottom: 200rpx;
   -webkit-overflow-scrolling: touch;
   box-sizing: border-box;
@@ -101,6 +102,10 @@ const { backUrl, checkFinish } = toRefs(data);
 
   &.no-scroll {
     overflow-y: hidden;
+  }
+
+  .scroll-view {
+    height: 78vh;
   }
 
   .mark-btn {
