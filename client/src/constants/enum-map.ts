@@ -12,9 +12,8 @@ import { NodeEnvEnum, PlanIconTypeEnum } from './enum';
  * - production: 生产环境ID
  */
 export const cloudEnvMap = {
-  [NodeEnvEnum.development]: 'broccoli-puuzo',
-  // [NodeEnvEnum.production]: 'on-line-1gqban3ba49e3d35',
-  [NodeEnvEnum.production]: 'broccoli-puuzo',
+  [NodeEnvEnum.development]: 'on-line-1gqban3ba49e3d35',
+  [NodeEnvEnum.production]: 'on-line-1gqban3ba49e3d35',
 };
 
 export const PlanIconContMap = {
