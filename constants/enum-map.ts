@@ -6,16 +6,6 @@ import DateIcon from '@/assets/plan/date.svg';
 import DateLiveIcon from '@/assets/plan/date_live.svg';
 import { NodeEnvEnum, PlanIconTypeEnum } from './enum';
 
-/**
- * 云开发环境ID
- * - development: 开发环境ID
- * - production: 生产环境ID
- */
-export const cloudEnvMap = {
-  [NodeEnvEnum.development]: 'on-line-1gqban3ba49e3d35',
-  [NodeEnvEnum.production]: 'on-line-1gqban3ba49e3d35',
-};
-
 export const PlanIconContMap = {
   [PlanIconTypeEnum.life]: '我的一天',
   [PlanIconTypeEnum.remind]: '提醒我',

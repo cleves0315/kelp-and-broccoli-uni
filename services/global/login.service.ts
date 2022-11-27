@@ -1,7 +1,9 @@
 import { request } from '@/utils/request';
 
 class GlobalService {
-  public login = () => request<string>('login');
+  public login = (code: string) => request<string>('login', {
+		code
+	});
 }
 
 export const globalService = new GlobalService();

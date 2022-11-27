@@ -50,11 +50,16 @@ const init = async () => {
   // request('planinfo', { action: 'resetPlan' });
 
   if (!userId) {
-    const data = await globalService.login();
-    setGlobalData({ user_id: data });
-    uni.setStorageSync('user_id', data);
-
-    init();
+		uni.login({
+			provider: "weixin",
+			success: async (res) => {
+				const data = await globalService.login(res.code);
+				setGlobalData({ user_id: data });
+				uni.setStorageSync('user_id', data);
+				
+				init();
+			}
+		})
     return;
   } else {
     setGlobalData({ user_id: userId });
@@ -67,7 +72,7 @@ const init = async () => {
 };
 
 onLoad(() => {
-  initCloud();
+  // initCloud();
   init();
 });
 
