@@ -9,7 +9,7 @@
         @touchstart="logoTouchStart"
         @touchend="logoTouchEnd"
         @click="onPlay"
-        src="https://6f6e-on-line-1gqban3ba49e3d35-1302613116.tcb.qcloud.la/broccoli.png?sign=7b6211e60087fd8fb1909cca697cb0a3&t=1612709339"
+        :src="LOGO_TRANSP_BASE64"
       >
       </image>
     </div>
@@ -25,7 +25,7 @@
 </template>
 
 <script lang="ts" setup>
-import { BO } from '@/constants';
+import { LOGO_TRANSP_BASE64, BO } from '@/constants';
 import { ref, reactive, toRefs } from 'vue';
 import { TouchLogo } from '@/constants/enum';
 
