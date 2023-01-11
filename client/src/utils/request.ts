@@ -1,6 +1,5 @@
 import { baseRequest, IRequestParams } from './baseRequest';
 import { hasServer } from './common';
-import { getStorageSync } from './getStorage';
 
 export const request = async <ReturnData>(
   url: string,
