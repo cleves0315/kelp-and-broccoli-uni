@@ -1,5 +1,6 @@
 import { baseRequest, IRequestParams } from './baseRequest';
 import { hasServer } from './common';
+import { getStorageSync } from './getStorage';
 
 export const request = async <ReturnData>(
   url: string,
@@ -10,15 +11,9 @@ export const request = async <ReturnData>(
   if (hasServer()) {
     try {
       const data = await baseRequest<ReturnData>({ name: url, data: params, config: { env } });
-
       return Promise.resolve(data);
     } catch (error) {
-      errToast &&
-        uni.showToast({
-          icon: 'none',
-          title: error.message,
-        });
-
+      errToast && uni.showToast({ icon: 'none', title: error.message });
       return Promise.reject(error);
     }
   } else {

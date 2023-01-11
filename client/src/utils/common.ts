@@ -1,7 +1,6 @@
 import { NodeEnvEnum } from '@/constants/enum';
 import { cloudEnvMap } from '@/constants/enum-map';
 import { getGlobalDataParams, IGlobalData } from '@/types/global';
-import { SUB_TEMPLATE_IDS } from '@/constants';
 
 const app = getApp({ allowDefault: true });
 
@@ -18,7 +17,7 @@ export const getRunningEnv = () => {
  * 使用云开发
  */
 export const hasServer = () => {
-  return getRunningEnv() === 'mp-weixin';
+  return false;
 };
 
 /**
@@ -34,7 +33,7 @@ export const initCloud = () => {
     // 这里指云函数初始化结束，不一定代表初始化成功(env：id 无效也会成功执行)
     return Promise.resolve('云函数初始化结束');
   } else {
-    return Promise.reject('当前环境不支持云开发SDK');
+    return Promise.reject('当前未开启云开发配置');
   }
 };
 
