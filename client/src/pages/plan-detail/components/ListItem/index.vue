@@ -59,6 +59,7 @@ $sideSpace: 40rpx;
 .list-item {
   height: $height;
   padding-left: $sideSpace;
+  padding-right: $sideSpace;
   overflow: hidden;
   box-sizing: border-box;
   color: #767678;
@@ -112,10 +113,13 @@ $sideSpace: 40rpx;
   }
 
   .operate-wrap {
+    $base: $height / 3;
+
     position: relative;
     width: $height;
     height: $height;
     flex-shrink: 0;
+    margin-right: -$base;
 
     &::before,
     &::after {

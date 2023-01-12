@@ -1,9 +1,5 @@
 <template>
-  <div
-    class="footer-input"
-    :class="{ 'changing-height': isFocus }"
-    :style="{ backgroundColor: bgColor, bottom: `${cursorSpacing}px` }"
-  >
+  <div class="footer-input" :class="{ 'changing-height': isFocus }" :style="{ bottom: `${cursorSpacing}px` }">
     <div v-if="showMask" class="footer-input-mask"></div>
 
     <div class="container">
@@ -26,7 +22,10 @@
         <div v-else class="focus-icon"></div>
       </div>
     </div>
-    <IphoneBottomSideAdapter />
+
+    <template v-if="!isFocus">
+      <IphoneBottomSideAdapter />
+    </template>
   </div>
 </template>
 
@@ -34,7 +33,6 @@
 import { defineProps, toRefs, reactive } from 'vue';
 import IphoneBottomSideAdapter from '../IphoneBottomSideAdapter/index.vue';
 export interface Props {
-  bgColor?: string; // 背景颜色
   inputPlaceTxt?: string; // input[placeholder]属性值
   maxlength?: number; // input[maxlength]属性值
   adjustPosition?: boolean; // 键盘弹起时，是否自动上推页面
@@ -50,7 +48,6 @@ export interface Data {
 
 const props = defineProps<Props>();
 const {
-  bgColor,
   inputPlaceTxt = '添加任务',
   maxlength = -1,
   adjustPosition = false,
@@ -105,14 +102,11 @@ const { showMask, cursorSpacing, value, isFocus } = toRefs(data);
   bottom: 0;
   transition: bottom 0.3s;
   background-color: #70c59e;
+  background-color: transparent;
   z-index: 9;
 
-  &.iphone {
-    padding-bottom: 30rpx;
-  }
-
   &.changing-height {
-    background: #fefefe;
+    background-color: #fefefe;
     border-radius: 20rpx 20rpx 0 0;
     box-shadow: 0 -10rpx 20rpx -10rpx rgba(0, 0, 0, 0.3);
 

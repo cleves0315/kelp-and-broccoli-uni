@@ -9,7 +9,7 @@
     <PlanList :list="todoList()" />
     <MarkBtn class-name="mark-btn" :direction="checkFinish" :onClick="handleClickMark" />
     <PlanList :visibility="checkFinish" :list="finisheList()" />
-    <FooterInput :bgColor="decorateBgColor()" inputPlaceTxt="添加任务" :confirm="handleConfrim" />
+    <FooterInput inputPlaceTxt="添加任务" :confirm="handleConfrim" />
   </div>
 </template>
 
