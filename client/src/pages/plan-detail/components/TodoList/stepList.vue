@@ -96,17 +96,17 @@ const { touching } = toRefs(data);
     content: '';
     position: absolute;
     top: 50%;
-    right: 0;
+    left: 50%;
     width: 48%;
     height: 2rpx;
     border-radius: 999rpx;
     background: #7c7c80;
   }
   .del-btn::after {
-    transform: translateY(-50%) rotate(45deg);
+    transform: translate(-50%) rotate(45deg);
   }
   .del-btn::before {
-    transform: translateY(-50%) rotate(-45deg);
+    transform: translate(-50%) rotate(-45deg);
   }
 }
 </style>

@@ -113,30 +113,28 @@ $sideSpace: 40rpx;
   }
 
   .operate-wrap {
-    $base: $height / 3;
-
     position: relative;
-    width: $height;
-    height: $height;
+    width: 50rpx;
+    height: 50rpx;
     flex-shrink: 0;
-    margin-right: -$base;
+    // margin-right: calc((50rpx / -3));
 
     &::before,
     &::after {
       content: '';
       position: absolute;
       top: 50%;
-      right: $sideSpace;
+      left: 50%;
       width: 22rpx;
       height: 2rpx;
       border-radius: 999rpx;
       background: #7c7c80;
     }
     &::before {
-      transform: translateY(-50%) rotate(-45deg);
+      transform: translate(-50%) rotate(-45deg);
     }
     &::after {
-      transform: translateY(-50%) rotate(45deg);
+      transform: translate(-50%) rotate(45deg);
     }
   }
 }
