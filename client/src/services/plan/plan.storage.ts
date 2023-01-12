@@ -19,9 +19,12 @@ class PlanStorage {
       uni.setStorageSync('planinfo', planList);
     } catch (error) {
       // 超过最大缓存容量10MB
-      planList.shift();
-      uni.setStorageSync('planinfo', planList);
-      this.addPlan(plan);
+      uni.showModal({
+        content: '当前缓存空间已占满，请手动清除部分数据',
+        showCancel: false,
+        confirmText: '知道了',
+      });
+      return Promise.reject(null);
     }
 
     return Promise.resolve(null);
