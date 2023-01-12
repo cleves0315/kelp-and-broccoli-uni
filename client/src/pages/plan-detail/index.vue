@@ -23,7 +23,7 @@ import { PlanTypeEnum, PlanIconTypeEnum } from '@/constants/enum';
 import { requestSubscribeMessage } from '@/utils/common';
 import { SUB_TEMPLATE_IDS } from '@/constants';
 import PickerTime from './components/picker-time/index.vue';
-import { onHide, onLoad, onShow, onUnload } from '@dcloudio/uni-app';
+import { onHide, onLoad, onUnload } from '@dcloudio/uni-app';
 
 export interface Props {
   plan_no: string;
