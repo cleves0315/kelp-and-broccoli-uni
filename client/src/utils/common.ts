@@ -33,7 +33,7 @@ export const initCloud = () => {
     // 这里指云函数初始化结束，不一定代表初始化成功(env：id 无效也会成功执行)
     return Promise.resolve('云函数初始化结束');
   } else {
-    return Promise.reject('当前未开启云开发配置');
+    return Promise.reject('当前未开启云开发请求');
   }
 };
 

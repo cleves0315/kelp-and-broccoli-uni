@@ -1,22 +1,47 @@
 import { IPlan } from '@/types/plan';
+import { hasServer } from '@/utils/common';
 import { request } from '@/utils/request';
+import { planStorage } from './plan.storage';
 
 class PlanService {
   public getPlanList = (user_id: string) => {
-    return request<IPlan[]>('planinfo', { action: 'get', data: { user_id } });
+    if (hasServer()) {
+      return request<IPlan[]>('planinfo', { action: 'get', data: { user_id } });
+    } else {
+      return planStorage.getPlanList();
+    }
   };
 
-  public addPlan = (plan: IPlan) => request<null>('planinfo', { action: 'add', data: { plan } }, '', false);
+  public addPlan = (plan: IPlan) => {
+    if (hasServer()) {
+      return request<null>('planinfo', { action: 'add', data: { plan } }, '', false);
+    } else {
+      return planStorage.addPlan(plan);
+    }
+  };
 
   public delPlan = (number: string) => {
-    return request<null>('planinfo', { action: 'del', data: { plan_no: number } }, '', false);
+    if (hasServer()) {
+      return request<null>('planinfo', { action: 'del', data: { plan_no: number } }, '', false);
+    } else {
+      return planStorage.delPlan(number);
+    }
   };
 
-  public updatePlan = (plan: IPlan) =>
-    request<null>('planinfo', { action: 'update', data: { plan } }, '', false);
+  public updatePlan = (plan: IPlan) => {
+    if (hasServer()) {
+      return request<null>('planinfo', { action: 'update', data: { plan } }, '', false);
+    } else {
+      return planStorage.updatePlan(plan);
+    }
+  };
 
   public getTodayBgImg = () => {
-    return request<string>('planinfo', { action: 'today_bg_img' });
+    if (hasServer()) {
+      return request<string>('planinfo', { action: 'today_bg_img' });
+    } else {
+      return planStorage.getTodayBgImg();
+    }
   };
 }
 
