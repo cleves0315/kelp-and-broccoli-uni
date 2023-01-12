@@ -24,7 +24,6 @@ import { usePlanStore } from '@/stores/plan';
 import { getGlobalData, initCloud, setGlobalData } from '@/utils/common';
 import { PlanTypeEnum } from '@/constants/enum';
 import { onLoad, onShow } from '@dcloudio/uni-app';
-import { request } from '@/utils/request';
 
 export interface State {
   toBack: boolean;

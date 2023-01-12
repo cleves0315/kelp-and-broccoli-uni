@@ -1,4 +1,3 @@
-import { initPlan } from '@/constants';
 import { IPlan } from '@/types/plan';
 
 class PlanStorage {

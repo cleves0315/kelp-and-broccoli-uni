@@ -41,12 +41,12 @@ const TypeMapList = [
     icon: PlanIconMap[PlanIconTypeEnum.life],
     liveIcon: PlanLiveIconMap[PlanIconTypeEnum.life],
   },
-  {
-    type: PlanIconTypeEnum.remind,
-    content: PlanIconContMap[PlanIconTypeEnum.remind],
-    icon: PlanIconMap[PlanIconTypeEnum.remind],
-    liveIcon: PlanLiveIconMap[PlanIconTypeEnum.remind],
-  },
+  // {
+  //   type: PlanIconTypeEnum.remind,
+  //   content: PlanIconContMap[PlanIconTypeEnum.remind],
+  //   icon: PlanIconMap[PlanIconTypeEnum.remind],
+  //   liveIcon: PlanLiveIconMap[PlanIconTypeEnum.remind],
+  // },
   {
     type: PlanIconTypeEnum.end,
     content: PlanIconContMap[PlanIconTypeEnum.end],
