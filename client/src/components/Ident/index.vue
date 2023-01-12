@@ -60,8 +60,9 @@ const handleTap = () => {
     content: '';
     width: 60%;
     height: 60%;
-    background: url(https://6272-broccoli-puuzo-1302613116.tcb.qcloud.la/icon.svg?sign=9326be99b7e582c0ef69cb05f00eca22&t=1599457379)
-      no-repeat 0 / 100% 100%;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-image: url(../../assets/plan/finished.svg);
   }
 }
 </style>
