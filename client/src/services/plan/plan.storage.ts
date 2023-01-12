@@ -51,7 +51,7 @@ class PlanStorage {
   };
 
   public getTodayBgImg = () => {
-    return Promise.resolve('https://i.328888.xyz/2023/01/12/lc2IV.jpeg');
+    return Promise.resolve('https://i.328888.xyz/2023/01/12/lGIiz.jpeg');
   };
 }
 

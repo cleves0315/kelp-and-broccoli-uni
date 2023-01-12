@@ -38,6 +38,7 @@ const { day = 0 } = defineProps<Props>();
 const data = reactive({
   touchLogo: TouchLogo.normal,
 });
+
 const innerAudioContext = uni.createInnerAudioContext();
 innerAudioContext.src = BO;
 
