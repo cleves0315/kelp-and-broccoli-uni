@@ -4,7 +4,13 @@
       <div class="ident-wrap">
         <Ident :checked="detailStore.plan.is_finish" :onClick="handleChangeState" />
       </div>
-      <input class="head-title" :value="detailStore.plan.title" @blur="handleBlur" />
+      <input
+        class="head-title"
+        :class="{ finished: detailStore.plan.is_finish }"
+        :style="{ '--timeline-left-width': '100rpx' }"
+        :value="detailStore.plan.title"
+        @blur="handleBlur"
+      />
     </div>
     <template v-for="step in detailStore.plan.step_list" :key="step.id">
       <Step :step="step" />
@@ -66,6 +72,26 @@ const { touching } = toRefs(data);
     margin-left: 30rpx;
     font-size: 40rpx;
     font-weight: 700;
+    width: var(--timeline-left-width);
+
+    &.finished {
+      color: #757575;
+      text-decoration: line-through;
+      text-decoration-line: line-through;
+      -webkit-text-decoration-line: line-through;
+      position: relative;
+
+      &::after {
+        content: '';
+        // position: absolute;
+        top: 50%;
+        left: 0;
+        right: 0;
+        transform: translateY(-50%) scale(1.5);
+        height: 2rpx;
+        background-color: #757575;
+      }
+    }
   }
 
   .ident-wrap {

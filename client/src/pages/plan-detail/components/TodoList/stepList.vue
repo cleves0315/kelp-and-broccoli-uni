@@ -8,7 +8,7 @@
     <div class="ident-wrap">
       <Ident size="small" :checked="step.is_finish" :onClick="handleChangeState" />
     </div>
-    <input class="step-title" :value="step.title" @blur="handleBlur" />
+    <input class="step-title" :class="{ finished: step.is_finish }" :value="step.title" @blur="handleBlur" />
     <div class="del-btn-wrap" @click="handleDelete"><div class="del-btn"></div></div>
   </div>
 </template>
@@ -84,6 +84,11 @@ const { touching } = toRefs(data);
     flex: 1;
     margin-left: 30rpx;
     font-size: 32rpx;
+
+    &.finished {
+      color: #757575;
+      text-decoration: line-through;
+    }
   }
 
   .del-btn-wrap {
