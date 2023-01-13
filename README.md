@@ -14,9 +14,9 @@
 海带与西兰花是一款计划管理工具，方便你的日常管理。
 
 <p>
-<img src="./assets/example1.jpeg" alt="diagram-1" width="280">
-<img src="./assets/example2.jpeg" alt="diagram-1" width="280">
-<img src="./assets/example3.png" alt="diagram-1" width="280">
+<img src="./assets/example1.jpeg" alt="diagram-1" width="270">
+<img src="./assets/example2.jpeg" alt="diagram-1" width="270">
+<img src="./assets/example3.png" alt="diagram-1" width="270">
 </p>
 
 ## 功能
