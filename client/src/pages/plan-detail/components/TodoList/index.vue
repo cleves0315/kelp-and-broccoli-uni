@@ -4,13 +4,14 @@
       <div class="ident-wrap">
         <Ident :checked="detailStore.plan.is_finish" :onClick="handleChangeState" />
       </div>
-      <input
-        class="head-title"
-        :class="{ finished: detailStore.plan.is_finish }"
-        :style="{ '--timeline-left-width': '100rpx' }"
-        :value="detailStore.plan.title"
-        @blur="handleBlur"
-      />
+      <div class="head-title-wrap">
+        <input
+          class="head-title"
+          :class="{ finished: detailStore.plan.is_finish }"
+          :value="detailStore.plan.title"
+          @blur="handleBlur"
+        />
+      </div>
     </div>
     <template v-for="step in detailStore.plan.step_list" :key="step.id">
       <Step :step="step" />
@@ -20,7 +21,7 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, toRefs } from 'vue';
+import { reactive } from 'vue';
 import Ident from '@/components/Ident/index.vue';
 import Step from './stepList.vue';
 import Operation from './operation.vue';
@@ -52,8 +53,6 @@ const handleBlur = (e) => {
     });
   }
 };
-
-const { touching } = toRefs(data);
 </script>
 
 <style lang="scss">
@@ -67,29 +66,22 @@ const { touching } = toRefs(data);
       background-color: #ecf0f1;
     }
   }
-  .head-title {
+
+  .head-title-wrap {
+    $padLeft: 30rpx;
+    position: relative;
+    margin-left: $padLeft;
     flex: 1;
-    margin-left: 30rpx;
-    font-size: 40rpx;
-    font-weight: 700;
-    width: var(--timeline-left-width);
+    overflow: hidden;
 
-    &.finished {
-      color: #757575;
-      text-decoration: line-through;
-      text-decoration-line: line-through;
-      -webkit-text-decoration-line: line-through;
-      position: relative;
+    .head-title {
+      flex: 1;
+      font-size: 40rpx;
+      font-weight: 700;
 
-      &::after {
-        content: '';
-        // position: absolute;
-        top: 50%;
-        left: 0;
-        right: 0;
-        transform: translateY(-50%) scale(1.5);
-        height: 2rpx;
-        background-color: #757575;
+      &.finished {
+        color: #757575;
+        text-decoration: line-through;
       }
     }
   }
