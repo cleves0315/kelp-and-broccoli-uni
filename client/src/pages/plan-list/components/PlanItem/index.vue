@@ -1,18 +1,10 @@
 <template>
-  <div
-    class="plan-item"
-    @touchstart="handleTouchStart"
-    @touchmove="handleTouchMove"
-    @touchend="handleTouchEnd"
-  >
-    <div
-      id="planRef"
-      ref="planRef"
-      class="plan-item-wrap"
-      :class="{ moving: moving }"
-      :style="distance !== 0 ? `transform: translateX(${distance}px)` : ''"
-    >
-      <div class="operation"><Ident :checked="plan.is_finish" :onClick="onChangeFinish" /></div>
+  <div class="plan-item">
+    <div id="planRef" ref="planRef" class="plan-item-wrap" :class="{ moving: moving }"
+      :style="distance !== 0 ? `transform: translateX(${distance}px)` : ''">
+      <div class="operation">
+        <Ident :checked="plan.is_finish" :onClick="onChangeFinish" />
+      </div>
       <div class="plan-item-content" @click="intoDetail">
         <div class="head" :class="{ finished: plan.is_finish }">{{ plan.title }}</div>
         <div class="detail-content">
@@ -22,11 +14,8 @@
             <text class="txt">我的一天</text>
           </view>
           <!-- 截止日期 -->
-          <div
-            class="tips-block end-date"
-            :class="{ overdue: !isAfterToday(plan.closing_date) }"
-            v-if="!!plan.closing_date"
-          >
+          <div class="tips-block end-date" :class="{ overdue: !isAfterToday(plan.closing_date) }"
+            v-if="!!plan.closing_date">
             <div class="split"></div>
             <image class="icon" :src="isAfterToday(plan.closing_date) ? overIcon : overIconExpired"></image>
             <text class="txt">{{ formatDate(plan.closing_date) }}</text>
@@ -44,12 +33,7 @@
         </div>
       </div>
     </div>
-    <div
-      class="delete-wrap"
-      :class="{ moving: moving }"
-      @click="onDelete"
-      :style="{ width: `${-distance}px` }"
-    >
+    <div class="delete-wrap" :class="{ moving: moving }" @click="onDelete" :style="{ width: `${-distance}px` }">
       <image class="delete-icon" :src="delIcon"></image>
     </div>
   </div>
@@ -342,6 +326,7 @@ const { liveToday, overIcon, overIconExpired, bookIcon, remindIcon, delIcon, dis
           color: $overdueRed;
         }
       }
+
       &:nth-last-of-type(1),
       &:nth-last-of-type(2) {
         flex-shrink: 0;
@@ -353,6 +338,7 @@ const { liveToday, overIcon, overIconExpired, bookIcon, remindIcon, delIcon, dis
       height: 20rpx;
       margin-right: 16rpx;
     }
+
     .txt {
       font-size: 28rpx;
       color: #757575;
@@ -372,6 +358,7 @@ const { liveToday, overIcon, overIconExpired, bookIcon, remindIcon, delIcon, dis
         display: none;
       }
     }
+
     .split {
       width: 4rpx;
       height: 4rpx;

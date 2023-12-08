@@ -12,7 +12,7 @@ const iphonex = ref(isIphone());
 <style lang="scss">
 .iphone-bottom-side-adapter {
   &.iphonex {
-    height: 30rpx;
+    height: 38rpx;
   }
 }
 </style>

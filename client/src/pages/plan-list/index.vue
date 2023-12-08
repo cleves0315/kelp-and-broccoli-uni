@@ -1,9 +1,5 @@
 <template>
-  <div
-    class="plan-list-page"
-    :class="{ 'no-scroll': store.touching === 'horizontal' }"
-    :style="{ 'background-image': `url(${backUrl})` }"
-  >
+  <div class="plan-list-page" :class="{ 'no-scroll': store.touching === 'horizontal' }">
     <CustomNavigationBar :title="naviBarTitle()" :bgColor="decorateBgColor()" :onBack="handleNaviBarBack" />
     <Headers :title="naviBarTitle()" />
     <PlanList :list="todoList()" />
@@ -82,6 +78,7 @@ const handleClickMark = () => {
 };
 
 const handleConfrim = (val: string) => {
+  uni.vibrateShort({ type: 'heavy' });
   store.addPlan(val, type as PlanTypeEnum);
 };
 
@@ -90,6 +87,11 @@ const { backUrl, checkFinish } = toRefs(data);
 
 <style lang="scss">
 .plan-list-page {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   height: 100vh;
   overflow-x: hidden;
   overflow-y: auto;
