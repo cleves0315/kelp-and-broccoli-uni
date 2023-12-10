@@ -1,11 +1,8 @@
 <template>
   <div class="home">
     <Headers :day="day" />
-    <Banner
-      :percentage="getTodayPercentage()"
-      :finishCount="getTodayFinishCount()"
-      :total="getTodayCount()"
-    />
+    <Banner :percentage="getTodayPercentage()" :finishCount="getTodayFinishCount()" :total="getTodayCount()"
+      :on-click="intoPlanList" />
     <Contents :finished="finishCount" :progress="store.planList.length - finishCount" />
     <FooterBtn content="所有计划" :onClick="intoPlanList" />
     <!-- 预加载"我的一天"背景图，此页面不做展示 -->

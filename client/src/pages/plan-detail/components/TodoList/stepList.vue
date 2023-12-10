@@ -1,15 +1,12 @@
 <template>
-  <div
-    class="plan-detail-step"
-    :class="{ touch: touching }"
-    @touchstart="touching = true"
-    @touchend="touching = false"
-  >
+  <div class="plan-detail-step" :class="{ touch: touching }" @touchstart="touching = true" @touchend="touching = false">
     <div class="ident-wrap">
       <Ident size="small" :checked="step.is_finish" :onClick="handleChangeState" />
     </div>
     <input class="step-title" :class="{ finished: step.is_finish }" :value="step.title" @blur="handleBlur" />
-    <div class="del-btn-wrap" @click="handleDelete"><div class="del-btn"></div></div>
+    <div class="del-btn-wrap" @click="handleDelete">
+      <div class="del-btn"></div>
+    </div>
   </div>
 </template>
 
@@ -51,7 +48,7 @@ const handleBlur = (e) => {
 
 const handleDelete = async () => {
   // 震动
-  uni.vibrateShort({});
+  uni.vibrateShort({ type: 'heavy' });
 
   uni.showActionSheet({
     itemList: ['删除计划'],
@@ -80,6 +77,7 @@ const { touching } = toRefs(data);
     width: 50rpx;
     justify-content: center;
   }
+
   .step-title {
     flex: 1;
     margin-left: 30rpx;
@@ -96,6 +94,7 @@ const { touching } = toRefs(data);
     width: 50rpx;
     height: 50rpx;
   }
+
   .del-btn::after,
   .del-btn::before {
     content: '';
@@ -107,9 +106,11 @@ const { touching } = toRefs(data);
     border-radius: 999rpx;
     background: #7c7c80;
   }
+
   .del-btn::after {
     transform: translate(-50%) rotate(45deg);
   }
+
   .del-btn::before {
     transform: translate(-50%) rotate(-45deg);
   }

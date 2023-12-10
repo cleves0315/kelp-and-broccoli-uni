@@ -15,12 +15,8 @@
             <div class="progress-quantity">{{ finishCount }}/{{ total }}目标</div>
           </div>
           <div class="progress-line">
-            <progress
-              :percent="percentage"
-              stroke-width="4"
-              :activeColor="progressActiveColor"
-              :backgroundColor="progressBackgroundColor"
-            ></progress>
+            <progress :percent="percentage" stroke-width="4" :activeColor="progressActiveColor"
+              :backgroundColor="progressBackgroundColor"></progress>
           </div>
         </div>
       </div>
@@ -29,16 +25,16 @@
 </template>
 
 <script lang="ts" setup>
-import { PlanTypeEnum } from '@/constants/enum';
 import { reactive, toRefs } from 'vue';
 
 export interface Props {
   percentage: number;
   finishCount: number;
   total: number;
+  onClick?: () => void;
 }
 
-const { percentage, finishCount, total } = defineProps<Props>();
+const { percentage, finishCount, total, onClick } = defineProps<Props>();
 
 const data = reactive({
   bannerTitle: '我的一天',
@@ -48,9 +44,7 @@ const data = reactive({
 });
 
 const handleTapBanner = () => {
-  uni.navigateTo({
-    url: `/pages/plan-list/index?type=${PlanTypeEnum.today}`,
-  });
+  onClick?.();
 };
 
 const { bannerTitle, rightTableTxt, progressActiveColor, progressBackgroundColor } = toRefs(data);
