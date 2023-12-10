@@ -2,15 +2,8 @@
   <div class="header">
     <div class="head">
       <div class="title">我在海带与西兰花</div>
-      <image
-        class="logos"
-        :class="{ 'touch-logo': touchLogo == 1, 'touch-end-logo': touchLogo == 2 }"
-        mode="widthFix"
-        @touchstart="logoTouchStart"
-        @touchend="logoTouchEnd"
-        @click="onPlay"
-        :src="LOGO_TRANSP_BASE64"
-      >
+      <image class="logos" :class="{ 'touch-logo': touchLogo == 1, 'touch-end-logo': touchLogo == 2 }" mode="widthFix"
+        @touchstart="logoTouchStart" @touchend="logoTouchEnd" @click="onPlay" :src="logo">
       </image>
     </div>
     <div class="content">
@@ -25,7 +18,8 @@
 </template>
 
 <script lang="ts" setup>
-import { LOGO_TRANSP_BASE64, BO } from '@/constants';
+import logo from '@/assets/logo.png';
+import { BO } from '@/constants';
 import { ref, reactive, toRefs } from 'vue';
 import { TouchLogo } from '@/constants/enum';
 
@@ -101,9 +95,11 @@ const { touchLogo } = toRefs(data);
     max-height: 68rpx;
     transition: transform 0.2s;
   }
+
   .touch-logo {
     transform: scale(0.7, 0.7);
   }
+
   .touch-end-logo {
     transform: scale(1.2, 1.2);
   }

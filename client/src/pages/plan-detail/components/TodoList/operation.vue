@@ -1,23 +1,12 @@
 <template>
-  <div
-    class="plan-detail-operation"
-    :class="{ touch: touching }"
-    @touchstart="touching = true"
-    @touchend="touching = false"
-  >
+  <div class="plan-detail-operation" :class="{ touch: touching }" @touchstart="touching = true"
+    @touchend="touching = false">
     <div class="icon-wrap">
       <Ident v-if="focus" size="small" />
       <div v-else class="add-icon"></div>
     </div>
-    <input
-      class="operation-text"
-      :class="{ focus: focus }"
-      placeholder="下一步"
-      v-model="value"
-      :placeholderClass="focus ? 'focus-placeholder' : 'input-placeholder'"
-      @focus="focus = true"
-      @blur="handleOnBlur"
-    />
+    <input class="operation-text" :class="{ focus: focus }" placeholder="下一步" v-model="value"
+      :placeholderClass="focus ? 'focus-placeholder' : 'input-placeholder'" @focus="focus = true" @blur="handleOnBlur" />
   </div>
 </template>
 
@@ -46,6 +35,7 @@ const handleOnBlur = (e) => {
 
   if (value) {
     data.value = '';
+    uni.vibrateShort({ type: 'heavy' });
     store.addStep(detailStore.plan.plan_no, value);
   }
 };
@@ -70,6 +60,7 @@ const { focus, value, touching } = toRefs(data);
     align-items: center;
     justify-content: center;
   }
+
   .add-icon {
     width: 32rpx;
     height: 32rpx;
@@ -89,6 +80,7 @@ const { focus, value, touching } = toRefs(data);
     &::after {
       transform: translateY(-50%);
     }
+
     &::before {
       transform: translateY(-50%) rotate(90deg);
     }

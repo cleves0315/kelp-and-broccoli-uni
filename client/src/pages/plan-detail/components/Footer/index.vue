@@ -98,7 +98,7 @@ const handleClick = async () => {
   .plan-detial-footer-wrapper {
     display: flex;
     align-items: center;
-    padding: 20rpx 40rpx;
+    padding: 24rpx 48rpx;
   }
 
   .content {

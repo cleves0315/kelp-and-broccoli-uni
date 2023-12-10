@@ -51,6 +51,7 @@
   /* 小程序特有相关 */
   "mp-weixin": {
     "appid": "wx6bda92e5b6c4facf",
+    "lazyCodeLoading": "requiredComponents",
     "setting": {
       "urlCheck": false
     },
