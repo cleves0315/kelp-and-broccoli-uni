@@ -20,7 +20,7 @@ import { globalService, planService, userService } from '@/services';
 import { usePlanStore } from '@/stores/plan';
 import { getGlobalData, initCloud, setGlobalData } from '@/utils/common';
 import { PlanTypeEnum } from '@/constants/enum';
-import { onLoad, onShow } from '@dcloudio/uni-app';
+import { onLoad, onShareAppMessage, onShow } from '@dcloudio/uni-app';
 
 export interface State {
   toBack: boolean;
@@ -75,6 +75,10 @@ onShow(() => {
     fetchPlanList();
   }
 });
+
+onShareAppMessage(() => {
+  return {}
+})
 
 const fetchUserDay = async () => {
   const day = await userService.getUserDay(getGlobalData('user_id'));
