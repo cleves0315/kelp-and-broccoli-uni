@@ -1,49 +1,52 @@
 <template>
-  <div class="plan-item">
-    <div id="planRef" ref="planRef" class="plan-item-wrap" :class="{ moving: moving }"
-      :style="distance !== 0 ? `transform: translateX(${distance}px)` : ''">
-      <div class="operation">
-        <Ident :checked="plan.is_finish" :onClick="onChangeFinish" />
-      </div>
-      <div class="plan-item-content" @click="intoDetail">
-        <div class="head" :class="{ finished: plan.is_finish }">{{ plan.title }}</div>
-        <div class="detail-content">
-          <!-- 我的一天 -->
-          <view class="tips-block" v-if="plan.type === PlanTypeEnum.today">
-            <image class="icon" :src="liveToday"></image>
-            <text class="txt">我的一天</text>
-          </view>
-          <!-- 截止日期 -->
-          <div class="tips-block end-date" :class="{ overdue: !isAfterToday(plan.closing_date) }"
-            v-if="!!plan.closing_date">
-            <div class="split"></div>
-            <image class="icon" :src="isAfterToday(plan.closing_date) ? overIcon : overIconExpired"></image>
-            <text class="txt">{{ formatDate(plan.closing_date) }}</text>
-          </div>
-          <!-- 提醒 -->
-          <div class="tips-block" v-if="plan.remind_time && isAfterToday(plan.remind_time)">
-            <div class="split"></div>
-            <image class="icon" :src="remindIcon"></image>
-          </div>
-          <!-- 编辑了详情 -->
-          <div class="tips-block" v-if="plan.detail">
-            <div class="split"></div>
-            <image class="icon" :src="bookIcon"></image>
+  <LongTouch @longTouch="isLongTouch = true; $emit('longTouch')">
+    <div class="plan-item">
+      <div id="planRef" ref="planRef" class="plan-item-wrap" :class="{ moving: moving }"
+        :style="distance !== 0 ? `transform: translateX(${distance}px)` : ''">
+        <div class="operation">
+          <Ident :checked="plan.is_finish" :onClick="onChangeFinish" />
+        </div>
+        <div class="plan-item-content" @click="handleOnClickItem">
+          <div class="head" :class="{ finished: plan.is_finish }">{{ plan.title }}</div>
+          <div class="detail-content">
+            <!-- 我的一天 -->
+            <view class="tips-block" v-if="plan.type === PlanTypeEnum.today">
+              <image class="icon" :src="liveToday"></image>
+              <text class="txt">我的一天</text>
+            </view>
+            <!-- 截止日期 -->
+            <div class="tips-block end-date" :class="{ overdue: !isAfterToday(plan.closing_date) }"
+              v-if="!!plan.closing_date">
+              <div class="split"></div>
+              <image class="icon" :src="isAfterToday(plan.closing_date) ? overIcon : overIconExpired"></image>
+              <text class="txt">{{ formatDate(plan.closing_date) }}</text>
+            </div>
+            <!-- 提醒 -->
+            <div class="tips-block" v-if="plan.remind_time && isAfterToday(plan.remind_time)">
+              <div class="split"></div>
+              <image class="icon" :src="remindIcon"></image>
+            </div>
+            <!-- 编辑了详情 -->
+            <div class="tips-block" v-if="plan.detail">
+              <div class="split"></div>
+              <image class="icon" :src="bookIcon"></image>
+            </div>
           </div>
         </div>
       </div>
+
+      <div class="delete-wrap" :class="{ moving: moving }" @click="onDelete" :style="{ width: `${-distance}px` }">
+        <image class="delete-icon" :src="delIcon"></image>
+      </div>
     </div>
-    <div class="delete-wrap" :class="{ moving: moving }" @click="onDelete" :style="{ width: `${-distance}px` }">
-      <image class="delete-icon" :src="delIcon"></image>
-    </div>
-  </div>
+  </LongTouch>
 </template>
 
 <script lang="ts" setup>
 import { IPlan } from '@/types/plan';
 import Ident from '@/components/Ident/index.vue';
 import { ref, reactive, toRefs, defineProps, watch, onBeforeMount, onMounted, getCurrentInstance } from 'vue';
-
+import LongTouch from '@/components/LongTouch/index.vue';
 import sunlight from '@/assets/plan/sunlight.svg';
 // import repeatLive from '@/assets/plan/repeat_live.svg';
 // import repeatExpired from '@/assets/plan/repeat_expired.svg';
@@ -54,7 +57,6 @@ import bell from '@/assets/plan/bell.svg';
 import delSvg from '@/assets/del_white.svg';
 import { usePlanStore } from '@/stores/plan';
 import { PlanTypeEnum } from '@/constants/enum';
-import { onLoad } from '@dcloudio/uni-app';
 
 export type PlantItemProps = {
   plan: IPlan;
@@ -62,6 +64,7 @@ export type PlantItemProps = {
 };
 
 const props = defineProps<PlantItemProps>();
+const emit = defineEmits(['longTouch'])
 const { plan } = props;
 
 const store = usePlanStore();
@@ -79,6 +82,8 @@ const data = reactive({
   distance: 0, // 手指滑动距离px（左边<0, 右边>0）
   moving: false, // 当前是否正在手势操作
 });
+
+const isLongTouch = ref(false);
 
 // 手指移动临时状态
 let touchX = 0,
@@ -167,57 +172,60 @@ const formatDate = (time: number | string) => {
   return dateString;
 };
 
-const handleTouchStart = (e) => {
-  const { clientX, clientY } = e.changedTouches[0];
 
-  touchX = clientX;
-  touchY = clientY;
-  startX = data.distance;
-  store.setReTouch(plan.plan_no);
-};
+// =================== 滑动删除逻辑
+// const handleTouchStart = (e) => {
+//   const { clientX, clientY } = e.changedTouches[0];
 
-const handleTouchMove = (e) => {
-  const { clientX, clientY } = e.changedTouches[0];
-  let diff = clientX - touchX + startX;
+//   touchX = clientX;
+//   touchY = clientY;
+//   startX = data.distance;
+//   store.setReTouch(plan.plan_no);
+// };
 
-  if (store.touching === 'vertical') {
-    return;
-  }
-  data.moving = true;
+// const handleTouchMove = (e) => {
+//   const { clientX, clientY } = e.changedTouches[0];
+//   let diff = clientX - touchX + startX;
 
-  if (!store.touching && Math.abs(clientX - touchX) > 15) {
-    store.setTouching('horizontal');
-  }
-  if (Math.abs(clientY - touchY) > 15) {
-    store.setTouching('vertical');
-  }
+//   if (store.touching === 'vertical') {
+//     return;
+//   }
+//   data.moving = true;
 
-  // 手势往右划 让他很难滑动
-  if (diff > 0) {
-    diff *= 0.1;
-  }
-  // 移动超过删除按钮的高度 让他很难滑动
-  if (-diff > domHeight) {
-    diff = -(domHeight - diff * 0.1);
-  }
+//   if (!store.touching && Math.abs(clientX - touchX) > 15) {
+//     store.setTouching('horizontal');
+//   }
+//   if (Math.abs(clientY - touchY) > 15) {
+//     store.setTouching('vertical');
+//   }
 
-  data.distance = diff;
-};
+//   // 手势往右划 让他很难滑动
+//   if (diff > 0) {
+//     diff *= 0.1;
+//   }
+//   // 移动超过删除按钮的高度 让他很难滑动
+//   if (-diff > domHeight) {
+//     diff = -(domHeight - diff * 0.1);
+//   }
 
-const handleTouchEnd = (e) => {
-  const { clientX } = e.changedTouches[0];
-  const diff = clientX - touchX;
+//   data.distance = diff;
+// };
 
-  // 手指往左滑动超过了元素高度，展示删除按钮
-  if (-diff > domHeight) {
-    data.distance = -domHeight - 15;
-  } else {
-    data.distance = 0;
-  }
+// const handleTouchEnd = (e) => {
+//   const { clientX } = e.changedTouches[0];
+//   const diff = clientX - touchX;
 
-  data.moving = false;
-  store.setTouching('');
-};
+//   // 手指往左滑动超过了元素高度，展示删除按钮
+//   if (-diff > domHeight) {
+//     data.distance = -domHeight - 15;
+//   } else {
+//     data.distance = 0;
+//   }
+
+//   data.moving = false;
+//   store.setTouching('');
+// };
+// =================== 滑动删除逻辑
 
 /** 设置元素节点横向偏移值 */
 const setDistance = (num: number) => {
@@ -234,6 +242,14 @@ const onChangeFinish = () => {
     true,
   );
 };
+
+const handleOnClickItem = () => {
+  if (isLongTouch.value) {
+    isLongTouch.value = false;
+    return;
+  }
+  intoDetail()
+}
 
 const intoDetail = () => {
   uni.navigateTo({
@@ -269,7 +285,7 @@ const { liveToday, overIcon, overIconExpired, bookIcon, remindIcon, delIcon, dis
   height: 110rpx;
   overflow: hidden;
   border-radius: 20rpx;
-  margin-bottom: 5rpx;
+  margin-bottom: 6rpx;
   background-color: #fefefe;
   box-shadow: 0 5rpx 10rpx rgba(0, 0, 0, 0.05);
 

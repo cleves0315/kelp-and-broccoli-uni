@@ -2,7 +2,7 @@
   <div class="plan-list-page" :class="{ 'no-scroll': store.touching === 'horizontal' }">
     <CustomNavigationBar :title="naviBarTitle()" :bgColor="decorateBgColor()" :onBack="handleNaviBarBack" />
     <Headers :title="naviBarTitle()" />
-    <PlanList :list="todoList()" />
+    <PlanList :list="todoList()" @long-touch-item="handleOnLongTouchListItem" />
     <MarkBtn class-name="mark-btn" :direction="checkFinish" :onClick="handleClickMark" />
     <PlanList :visibility="checkFinish" :list="finisheList()" />
     <FooterInput inputPlaceTxt="添加任务" :confirm="handleConfrim" />
@@ -81,6 +81,19 @@ const handleConfrim = (val: string) => {
   uni.vibrateShort({ type: 'heavy' });
   store.addPlan(val, type as PlanTypeEnum);
 };
+
+const handleOnLongTouchListItem = async () => {
+  uni.vibrateShort({ type: 'heavy' });
+  const itemList = ['置顶'];
+
+  const { tapIndex } = await uni.showActionSheet({
+    itemList: itemList,
+  })
+
+  console.log('itemList[tapIndex]: ', itemList[tapIndex]);
+
+
+}
 
 const { backUrl, checkFinish } = toRefs(data);
 </script>

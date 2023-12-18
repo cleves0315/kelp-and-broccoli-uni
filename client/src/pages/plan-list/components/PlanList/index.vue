@@ -1,12 +1,9 @@
 <template>
-  <div
-    class="plan-list"
-    :class="{ hidden: !props.visibility }"
-    :style="{ height: _height !== null ? `${_height}px` : 'auto' }"
-  >
+  <div class="plan-list" :class="{ hidden: !props.visibility }"
+    :style="{ height: _height !== null ? `${_height}px` : 'auto' }">
     <div id="planListRef">
       <template v-for="plan in props.list" :key="plan.plan_no">
-        <PlanItem id="planItem" ref="planItem" :plan="plan" />
+        <PlanItem id="planItem" ref="planItem" :plan="plan" @long-touch="$emit('longTouchItem')" />
       </template>
     </div>
   </div>
@@ -21,6 +18,8 @@ export interface Props {
   list?: IPlan[];
   visibility?: boolean;
 }
+
+const emit = defineEmits(['longTouchItem'])
 
 const inst = getCurrentInstance();
 const query = uni.createSelectorQuery().in(inst);
