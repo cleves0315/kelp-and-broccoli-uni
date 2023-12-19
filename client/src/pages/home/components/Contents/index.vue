@@ -3,13 +3,9 @@
     <div class="container">
       <div class="title">- {{ title }} -</div>
       <div class="main">
-        <div class="item">
-          <div class="num">{{ progress }}</div>
-          <div class="name">进行中</div>
-        </div>
-        <div class="item">
-          <div class="num">{{ finished }}</div>
-          <div class="name">已完成</div>
+        <div class="item" v-for="(item, index) in items" :key="index">
+          <div class="num">{{ item.value }}</div>
+          <div class="name">{{ item.label }}</div>
         </div>
       </div>
     </div>
@@ -20,15 +16,14 @@
 import { reactive, toRefs } from 'vue';
 
 export interface Props {
-  finished: number;
-  progress: number;
+  items: { label: string; value: string | number }[];
 }
 
 const data = reactive({
   title: '总计划详情',
 });
 
-const { progress = 0, finished = 0 } = defineProps<Props>();
+const { items = [] } = defineProps<Props>();
 
 const { title } = toRefs(data);
 </script>

@@ -34,10 +34,10 @@ const data = reactive({
 });
 
 const innerAudioContext = uni.createInnerAudioContext();
-innerAudioContext.src = BO;
+// innerAudioContext.src = BO;
 
 const onPlay = () => {
-  innerAudioContext.play();
+  // innerAudioContext.play();
 };
 
 const logoTouchStart = () => {

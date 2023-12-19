@@ -3,7 +3,10 @@
     <Headers :day="day" />
     <Banner :percentage="getTodayPercentage()" :finishCount="getTodayFinishCount()" :total="getTodayCount()"
       :on-click="intoPlanList" />
-    <Contents :finished="finishCount" :progress="store.planList.length - finishCount" />
+    <Contents :items="[
+      { label: '进行中', value: inProgressCount },
+      { label: '总数', value: store.planList.length },
+    ]" />
     <FooterBtn content="所有计划" :onClick="intoPlanList" />
     <!-- 预加载"我的一天"背景图，此页面不做展示 -->
     <image class="today-bg-transparent" :src="todayBg"></image>
@@ -11,7 +14,7 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, toRefs } from 'vue';
+import { reactive, toRefs, computed } from 'vue';
 import Headers from './components/Header/index.vue';
 import Banner from './components/Banner/index.vue';
 import Contents from './components/Contents/index.vue';
@@ -99,10 +102,14 @@ const fetchTodayBgImg = async () => {
   });
 };
 
-const getTodayCount = () => store.planList.filter((m) => m.type === PlanTypeEnum.today).length;
+const getTodayCount = () => store.planList.length;
+
+const inProgressCount = computed(() => {
+  return store.planList.filter(m => !m.is_finish).length;
+})
 
 const getTodayFinishCount = () =>
-  store.planList.filter((m) => m.is_finish && m.type === PlanTypeEnum.today).length;
+  store.planList.filter((m) => m.is_finish).length;
 
 const getFinishCount = () => store.planList.filter((m) => m.is_finish).length;
 
