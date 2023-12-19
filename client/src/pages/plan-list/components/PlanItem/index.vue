@@ -1,8 +1,9 @@
 <template>
   <LongTouch @longTouch="isLongTouch = true; $emit('longTouch', plan)">
-    <div class="plan-item">
-      <div id="planRef" ref="planRef" class="plan-item-wrap" :class="{ moving: moving, }"
-        :style="distance !== 0 ? `transform: translateX(${distance}px)` : ''">
+    <div class="plan-item" :class="{ scale: scale }">
+      <div id="planRef" ref="planRef" class="plan-item-wrap" :class="{ moving: moving }"
+        :style="distance !== 0 ? `transform: translateX(${distance}px)` : ''" @touchstart="scale = true"
+        @touchmove="scale = false" @touchend="scale = false">
         <div class="operation">
           <Ident :checked="plan.is_finish" :onClick="onChangeFinish" />
         </div>
@@ -53,7 +54,6 @@ import sunlight from '@/assets/plan/sunlight.svg';
 import dateLive from '@/assets/plan/date_live.svg';
 import dateOver from '@/assets/plan/date_over.svg';
 import bookSvg from '@/assets/plan/book.svg';
-import topFill from '@/assets/plan/top_fill2.svg';
 import bell from '@/assets/plan/bell.svg';
 import delSvg from '@/assets/del_white.svg';
 import { usePlanStore } from '@/stores/plan';
@@ -79,13 +79,13 @@ const data = reactive({
   bookIcon: bookSvg, // 详情
   remindIcon: bell, // 提醒
   delIcon: delSvg, // 提醒
-  topIcon: topFill, // 提醒
 
   distance: 0, // 手指滑动距离px（左边<0, 右边>0）
   moving: false, // 当前是否正在手势操作
 });
 
 const isLongTouch = ref(false);
+const scale = ref(false);
 
 // 手指移动临时状态
 let touchX = 0,
@@ -277,7 +277,7 @@ defineExpose({
   setDistance,
 });
 
-const { liveToday, overIcon, overIconExpired, bookIcon, remindIcon, delIcon, topIcon, distance, moving } =
+const { liveToday, overIcon, overIconExpired, bookIcon, remindIcon, delIcon, distance, moving } =
   toRefs(data);
 </script>
 
@@ -289,7 +289,12 @@ const { liveToday, overIcon, overIconExpired, bookIcon, remindIcon, delIcon, top
   border-radius: 20rpx;
   margin-bottom: 6rpx;
   background-color: #fefefe;
+  transition: transform .2s ease;
   box-shadow: 0 5rpx 10rpx rgba(0, 0, 0, 0.05);
+
+  &.scale {
+    transform: scale(.96);
+  }
 
   .plan-item-wrap {
     display: flex;

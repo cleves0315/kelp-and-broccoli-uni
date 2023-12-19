@@ -1,5 +1,5 @@
 <template>
-  <div @touchstart="onTouchStart" @touchend="onTouchEnd">
+  <div @touchstart="onTouchStart" @touchmove="onTouchMove" @touchend="onTouchEnd">
     <slot></slot>
   </div>
 </template>
@@ -9,13 +9,26 @@ import { ref } from 'vue';
 
 const emit = defineEmits(['longTouch']);
 
-const delay = 500; // ms
+const delay = 400; // ms
 const timer = ref();
+const start = ref({ x: undefined, y: undefined });
 
-const onTouchStart = () => {
+const onTouchStart = (e: TouchEvent) => {
+  const { clientX, clientY } = e.touches[0];
+  start.value = { x: clientX, y: clientY };
   timer.value = setTimeout(() => {
     emit('longTouch');
   }, delay);
+}
+
+const onTouchMove = (e: TouchEvent) => {
+  const { clientX, clientY } = e.touches[0];
+  const diffX = Math.abs(clientX - start.value.x);
+  const diffY = Math.abs(clientY - start.value.y);
+
+  if (diffX >= 20 || diffY >= 20) {
+    clearTimeout(timer.value);
+  }
 }
 
 const onTouchEnd = () => {
