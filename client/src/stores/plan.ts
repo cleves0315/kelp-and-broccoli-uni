@@ -105,5 +105,31 @@ export const usePlanStore = defineStore('planList', {
     setReTouch(planNo: string) {
       this.reTouch = planNo;
     },
+
+    setTop(planNo: string) {
+      let index = -1;
+      const plan = this.planList.find((item, i) => {
+        index = i;
+        return item.plan_no === planNo;
+      })
+
+      const intoTop = () => {
+        plan.top_time = Date.now();
+        this.planList.splice(index, 1);
+        this.planList.unshift(plan);
+      }
+      const resetPosition = () => {
+        delete plan.top_time;
+        // 按创建时间排序
+        this.planList.sort((x, y) => y.create_time - x.create_time);
+      }
+
+      if (plan.top_time) {
+        resetPosition()
+      } else {
+        intoTop();
+      }
+      planService.setTop(planNo, plan.top_time ? '0' : '1');
+    }
   },
 });

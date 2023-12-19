@@ -43,6 +43,19 @@ class PlanService {
       return planStorage.getTodayBgImg();
     }
   };
+
+  /**
+   * 
+   * @param type — '0' 取消置顶，'1' 置顶
+   */
+  public setTop = (planNo: string, type: "0" | "1") => {
+    if (hasServer()) {
+      return Promise.resolve('')
+      // return request<string>('planinfo', { action: 'today_bg_img' });
+    } else {
+      return planStorage.setTop(planNo, type);
+    }
+  };
 }
 
 export const planService = new PlanService();

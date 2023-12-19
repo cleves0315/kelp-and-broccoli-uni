@@ -3,7 +3,7 @@
     :style="{ height: _height !== null ? `${_height}px` : 'auto' }">
     <div id="planListRef">
       <template v-for="plan in props.list" :key="plan.plan_no">
-        <PlanItem id="planItem" ref="planItem" :plan="plan" @long-touch="$emit('longTouchItem')" />
+        <PlanItem id="planItem" ref="planItem" :plan="plan" @long-touch="$emit('longTouchItem', plan)" />
       </template>
     </div>
   </div>

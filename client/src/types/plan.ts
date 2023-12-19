@@ -27,6 +27,8 @@ export type IPlan = {
   finish_date: number;
   /** 提醒时间 */
   remind_time?: number;
+  /** 置顶时间 */
+  top_time?: number;
 };
 
 export type IStep = {

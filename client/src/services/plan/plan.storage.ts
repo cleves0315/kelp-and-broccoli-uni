@@ -8,6 +8,10 @@ class PlanStorage {
       uni.setStorageSync('planinfo', []);
     }
 
+    // 按创建时间排序
+    planList.sort((x, y) => y.create_time - x.create_time);
+    planList.sort((x, y) => (y.top_time || 0) - (x.top_time || 0));
+
     return Promise.resolve(planList || []);
   };
 
@@ -52,6 +56,26 @@ class PlanStorage {
 
   public getTodayBgImg = () => {
     return Promise.resolve('https://i.328888.xyz/2023/01/12/lGIiz.jpeg');
+  };
+
+  /**
+   * 
+   * @param type '0' 取消置顶，'1' 置顶
+   */
+  public setTop = (planNo: string, type: '0' | '1') => {
+    const planList: IPlan[] = uni.getStorageSync('planinfo') || [];
+    const findIndex = planList.findIndex((m) => m.plan_no === planNo);
+
+    const topPlan = planList.splice(findIndex, 1)[0];
+    if (type === '0') {
+      delete topPlan.top_time;
+    } else if (type === '1') {
+      topPlan.top_time = Date.now(); // 添加置顶时间
+    }
+    planList.unshift(topPlan);
+
+    uni.setStorageSync('planinfo', planList);
+    return Promise.resolve(null);
   };
 }
 

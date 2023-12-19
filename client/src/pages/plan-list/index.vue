@@ -55,18 +55,16 @@ const naviBarTitle = () => (type === PlanTypeEnum.all ? '计划列表' : '我的
 
 const decorateBgColor = () => (type === PlanTypeEnum.today ? 'transparent' : '');
 
-// 获取未完成计划列表 - 按创建时间排序
+// 获取未完成计划列表
 const todoList = () => {
   return plnaList()
-    .filter((plan) => !plan.is_finish)
-    .sort((x, y) => y.create_time - x.create_time);
+    .filter((plan) => !plan.is_finish);
 };
 
-// 获取已完成计划列表 - 按完成时间排序
+// 获取已完成计划列表
 const finisheList = () => {
   return plnaList()
-    .filter((plan) => plan.is_finish)
-    .sort((x, y) => y.finish_date - x.finish_date);
+    .filter((plan) => plan.is_finish);
 };
 
 const handleNaviBarBack = () => {
@@ -82,7 +80,7 @@ const handleConfrim = (val: string) => {
   store.addPlan(val, type as PlanTypeEnum);
 };
 
-const handleOnLongTouchListItem = async () => {
+const handleOnLongTouchListItem = async (plan: IPlan) => {
   uni.vibrateShort({ type: 'heavy' });
   const itemList = ['置顶'];
 
@@ -90,8 +88,14 @@ const handleOnLongTouchListItem = async () => {
     itemList: itemList,
   })
 
-  console.log('itemList[tapIndex]: ', itemList[tapIndex]);
+  switch (tapIndex) {
+    case 0:
+      store.setTop(plan.plan_no);
+      break;
 
+    default:
+      break;
+  }
 
 }
 
