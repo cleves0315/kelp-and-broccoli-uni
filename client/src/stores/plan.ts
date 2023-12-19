@@ -126,10 +126,11 @@ export const usePlanStore = defineStore('planList', {
 
       if (plan.top_time) {
         resetPosition()
+        planService.setTop(planNo, '0');
       } else {
         intoTop();
+        planService.setTop(planNo, '1');
       }
-      planService.setTop(planNo, plan.top_time ? '0' : '1');
     }
   },
 });

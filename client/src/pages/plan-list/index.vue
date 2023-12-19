@@ -82,15 +82,19 @@ const handleConfrim = (val: string) => {
 
 const handleOnLongTouchListItem = async (plan: IPlan) => {
   uni.vibrateShort({ type: 'heavy' });
-  const itemList = ['置顶'];
+  const itemList = ['置顶', '删除'];
 
   const { tapIndex } = await uni.showActionSheet({
+    title: plan.title,
     itemList: itemList,
   })
 
   switch (tapIndex) {
     case 0:
       store.setTop(plan.plan_no);
+      break;
+    case 1:
+      store.delPlan(plan.plan_no);
       break;
 
     default:

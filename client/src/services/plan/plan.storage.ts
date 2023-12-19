@@ -1,4 +1,5 @@
 import { IPlan } from '@/types/plan';
+import { log } from '@/utils/log';
 
 class PlanStorage {
   public getPlanList = (): Promise<IPlan[]> => {
@@ -66,13 +67,11 @@ class PlanStorage {
     const planList: IPlan[] = uni.getStorageSync('planinfo') || [];
     const findIndex = planList.findIndex((m) => m.plan_no === planNo);
 
-    const topPlan = planList.splice(findIndex, 1)[0];
     if (type === '0') {
-      delete topPlan.top_time;
+      delete planList[findIndex].top_time;
     } else if (type === '1') {
-      topPlan.top_time = Date.now(); // 添加置顶时间
+      planList[findIndex].top_time = Date.now(); // 添加置顶时间
     }
-    planList.unshift(topPlan);
 
     uni.setStorageSync('planinfo', planList);
     return Promise.resolve(null);
