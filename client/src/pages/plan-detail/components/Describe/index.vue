@@ -1,13 +1,7 @@
 <template>
   <div class="describe-wrap">
-    <textarea
-      class="describe"
-      :autoHeight="true"
-      placeholder="添加备注"
-      :cursor-spacing="12"
-      :value="detailStore.plan.detail"
-      @blur="handleDescribeBlur"
-    ></textarea>
+    <textarea class="describe" :autoHeight="true" placeholder="添加备注" :cursor-spacing="12" :value="detailStore.plan.detail"
+      @blur="handleDescribeBlur" maxlength="200"></textarea>
   </div>
 </template>
 
@@ -43,6 +37,7 @@ const handleDescribeBlur = (e) => {
       font-size: 30rpx;
     }
   }
+
   .textarea-placeholder,
   .describe::-webkit-input-placeholder {
     color: #767678;

@@ -1,5 +1,7 @@
+import { createPlans } from '@/constants';
 import { IPlan } from '@/types/plan';
 import { log } from '@/utils/log';
+import { PlanTypeEnum } from '@/constants/enum';
 
 class PlanStorage {
   public getPlanList = (): Promise<IPlan[]> => {
@@ -77,6 +79,26 @@ class PlanStorage {
     uni.setStorageSync('planinfo', planList);
     return Promise.resolve(null);
   };
+
+  public initPlan = () => {
+    const inittedPlans = (() => {
+      createPlans({
+        title: '使用须知',
+        type: PlanTypeEnum.all,
+        //         及时性待办清单是什么？
+        // 就是你短期内需要完成的事的待办列表。
+
+        // 记住！只写下你短期内要做的事。
+        // 长期的待办目标，请记录在其他的笔记软件里。
+
+        // 这么做相比写 todolist 有什么区别？
+        // 因为这里只记录你短期内要完成的事情，你能更专注的处理它们。空闲时间就回来扫视下待办列表一并 kill 掉。
+
+
+        // 举个栗子：
+      })
+    })();
+  }
 }
 
 export const planStorage = new PlanStorage();

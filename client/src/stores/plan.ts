@@ -1,4 +1,4 @@
-import { defaultPlan, initPlans, initStep } from '@/constants';
+import { defaultPlan, createPlans, initStep } from '@/constants';
 import { PlanTypeEnum } from '@/constants/enum';
 import { planService } from '@/services';
 import { IPlan, IRepeat, IStep } from '@/types/plan';
@@ -47,14 +47,7 @@ export const usePlanStore = defineStore('planList', {
     },
 
     addPlan(title: string, type: PlanTypeEnum) {
-      const data = initPlans({
-        title,
-        type,
-        user_id: getGlobalData('user_id'),
-        plan_no: uuid(),
-        create_time: Date.now(),
-        update_time: Date.now(),
-      });
+      const data = createPlans({ title, type, });
 
       this.planList.unshift(data);
       planService.addPlan(data);
