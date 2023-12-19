@@ -1,6 +1,7 @@
 import { IPlan, IStep } from '@/types/plan';
+import { PlanTypeEnum } from './enum';
 
-export const initPlan: IPlan = {
+export const defaultPlan: IPlan = {
   plan_no: '',
   user_id: '',
   open_id: '',
@@ -22,3 +23,17 @@ export const initStep: IStep = {
   title: '',
   is_finish: false,
 };
+
+
+export interface InitPlansParams {
+  title: string;
+  type: PlanTypeEnum;
+  user_id: string;
+  plan_no: string;
+  create_time: number;
+  update_time: number;
+}
+
+export const initPlans = (params: InitPlansParams): IPlan => {
+  return Object.assign({}, defaultPlan, params);
+}
