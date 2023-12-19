@@ -56,7 +56,7 @@ export const usePlanStore = defineStore('planList', {
         update_time: Date.now(),
       });
 
-      this.planList.push(data);
+      this.planList.unshift(data);
       planService.addPlan(data);
     },
 

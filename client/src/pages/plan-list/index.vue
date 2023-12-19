@@ -2,7 +2,7 @@
   <div class="plan-list-page" :class="{ 'no-scroll': store.touching === 'horizontal' }">
     <CustomNavigationBar :title="naviBarTitle()" :bgColor="decorateBgColor()" :onBack="handleNaviBarBack" />
     <Headers :title="naviBarTitle()" />
-    <PlanList :list="todoList()" @long-touch-item="handleOnLongTouchListItem" />
+    <PlanList :list="todoList" @long-touch-item="handleOnLongTouchListItem" />
     <MarkBtn class-name="mark-btn" :direction="checkFinish" :onClick="handleClickMark" />
     <PlanList :visibility="checkFinish" :list="finisheList()" />
     <FooterInput inputPlaceTxt="添加任务" :confirm="handleConfrim" />
@@ -15,7 +15,7 @@ import MarkBtn from './components/MarkBtn/index.vue';
 import FooterInput from '@/components/FooterInput/index.vue';
 import CustomNavigationBar from '@/components/CustomNavigationBar/index.vue';
 import PlanList from './components/PlanList/index.vue';
-import { onBeforeMount, reactive, toRefs } from 'vue';
+import { onBeforeMount, computed, reactive, toRefs } from 'vue';
 import { usePlanStore } from '@/stores/plan';
 import { IPlan } from '@/types/plan';
 import { PlanTypeEnum } from '@/constants/enum';
@@ -56,10 +56,10 @@ const naviBarTitle = () => (type === PlanTypeEnum.all ? '计划列表' : '我的
 const decorateBgColor = () => (type === PlanTypeEnum.today ? 'transparent' : '');
 
 // 获取未完成计划列表
-const todoList = () => {
+const todoList = computed(() => {
   return plnaList()
-    .filter((plan) => !plan.is_finish);
-};
+    .filter((plan) => !plan.is_finish).sort((x, y) => y.top_time || 0 - x.top_time || 0)
+});
 
 // 获取已完成计划列表
 const finisheList = () => {
@@ -82,7 +82,7 @@ const handleConfrim = (val: string) => {
 
 const handleOnLongTouchListItem = async (plan: IPlan) => {
   uni.vibrateShort({ type: 'heavy' });
-  const itemList = ['置顶', '删除'];
+  const itemList = [plan.top_time ? '取消置顶' : '置顶', '删除'];
 
   const { tapIndex } = await uni.showActionSheet({
     title: plan.title,

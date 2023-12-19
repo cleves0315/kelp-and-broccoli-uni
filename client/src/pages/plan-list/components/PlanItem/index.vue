@@ -1,5 +1,5 @@
 <template>
-  <LongTouch @longTouch="isLongTouch = true; $emit('longTouch', plan)">
+  <LongTouch @longTouch="isLongTouch = true; scale = false; $emit('longTouch', plan)">
     <div class="plan-item" :class="{ scale: scale }">
       <div id="planRef" ref="planRef" class="plan-item-wrap" :class="{ moving: moving }"
         :style="distance !== 0 ? `transform: translateX(${distance}px)` : ''" @touchstart="scale = true"
