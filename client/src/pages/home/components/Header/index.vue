@@ -19,9 +19,8 @@
 
 <script lang="ts" setup>
 import logo from '@/assets/logo.png';
-import { BO } from '@/constants';
-import { ref, reactive, toRefs } from 'vue';
 import { TouchLogo } from '@/constants/enum';
+import { reactive, ref, toRefs } from 'vue';
 
 export interface Props {
   day?: number;
@@ -118,6 +117,7 @@ const { touchLogo } = toRefs(data);
 
   .date .num {
     font-size: 120rpx;
+    font-family: WEMONum-Bold, WEMONum;
   }
 
   .date .day {

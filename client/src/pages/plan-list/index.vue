@@ -10,16 +10,16 @@
 </template>
 
 <script lang="ts" setup>
-import Headers from './components/Header/index.vue';
-import MarkBtn from './components/MarkBtn/index.vue';
-import FooterInput from '@/components/FooterInput/index.vue';
 import CustomNavigationBar from '@/components/CustomNavigationBar/index.vue';
-import PlanList from './components/PlanList/index.vue';
-import { onBeforeMount, computed, reactive, toRefs, ref } from 'vue';
+import FooterInput from '@/components/FooterInput/index.vue';
+import { PlanTypeEnum } from '@/constants/enum';
 import { usePlanStore } from '@/stores/plan';
 import { IPlan } from '@/types/plan';
-import { PlanTypeEnum } from '@/constants/enum';
 import { getGlobalData } from '@/utils/common';
+import { computed, onBeforeMount, reactive, toRefs } from 'vue';
+import Headers from './components/Header/index.vue';
+import MarkBtn from './components/MarkBtn/index.vue';
+import PlanList from './components/PlanList/index.vue';
 
 export interface Props {
   type: string;
@@ -50,7 +50,7 @@ const plnaList = () => {
 
 onBeforeMount(() => {
   // 数据结构更新
-  // request('planinfo', { action: 'resetPlan', user_id: uni.getStorageSync('user_id') });
+  // request('planinfo', { action: 'resetPlan', user_id: getStorageSync('user_id') });
 });
 
 const naviBarTitle = () => (type === PlanTypeEnum.all ? '计划列表' : '我的一天');

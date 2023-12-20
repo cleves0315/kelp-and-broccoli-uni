@@ -8,27 +8,33 @@
       { label: '总数', value: store.planList.length },
     ]" />
     <FooterBtn content="所有计划" :onClick="intoPlanList" />
+    <AnimationRain :show="loginedSameDay" />
     <!-- 预加载"我的一天"背景图，此页面不做展示 -->
     <image class="today-bg-transparent" :src="todayBg"></image>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { reactive, toRefs, computed } from 'vue';
-import Headers from './components/Header/index.vue';
-import Banner from './components/Banner/index.vue';
-import Contents from './components/Contents/index.vue';
-import FooterBtn from './components/FooterBtn/index.vue';
+import AnimationRain from '@/components/AnimationRain/index.vue';
+import { PlanTypeEnum } from '@/constants/enum';
 import { globalService, planService, userService } from '@/services';
 import { usePlanStore } from '@/stores/plan';
 import { getGlobalData, initCloud, setGlobalData } from '@/utils/common';
-import { PlanTypeEnum } from '@/constants/enum';
+import { isSameDay } from '@/utils/day';
+import { getStorageSync, setStorageSync } from '@/utils/storage';
 import { onLoad, onShareAppMessage, onShow } from '@dcloudio/uni-app';
+import { computed, reactive, toRefs } from 'vue';
+import Banner from './components/Banner/index.vue';
+import Contents from './components/Contents/index.vue';
+import FooterBtn from './components/FooterBtn/index.vue';
+import Headers from './components/Header/index.vue';
 
 export interface State {
   toBack: boolean;
   footerBtnTxt: string;
   day?: number;
+  /** 不是当天则会有落雨动画 */
+  showAnimaRain?: boolean;
   finishCount: number;
   todayBg: string;
 }
@@ -41,10 +47,11 @@ const data = reactive<State>({
   day: 1,
   finishCount: 0,
   todayBg: '',
+  showAnimaRain: true,
 });
 
 const init = async () => {
-  const userId = uni.getStorageSync('user_id');
+  const userId = getStorageSync('user_id');
   uni.showLoading({ title: '加载中...', mask: true });
 
   // request('planinfo', { action: 'resetPlan' });
@@ -52,7 +59,7 @@ const init = async () => {
   if (!userId) {
     const data = await globalService.login();
     setGlobalData({ user_id: data });
-    uni.setStorageSync('user_id', data);
+    setStorageSync('user_id', data);
 
     init();
     return;
@@ -84,9 +91,24 @@ onShareAppMessage(() => {
 })
 
 const fetchUserDay = async () => {
-  const day = await userService.getUserDay(getGlobalData('user_id'));
+  const { day, update_time_day } = await userService.getUserDay(getGlobalData('user_id'));
   data.day = day;
+
+  verifyUpdateDayTime(update_time_day);
 };
+
+const verifyUpdateDayTime = (newTime: number) => {
+  const storgDayTime = getStorageSync('update_day');
+  if (typeof storgDayTime === 'undefined') {
+    data.showAnimaRain = true;
+  } else {
+    data.showAnimaRain = !isSameDay(storgDayTime, newTime);
+  }
+
+  if (newTime) {
+    setStorageSync('update_day', newTime);
+  }
+}
 
 const fetchPlanList = async () => {
   const planList = await planService.getPlanList(getGlobalData('user_id'));
@@ -124,7 +146,7 @@ const intoPlanList = () => {
   });
 };
 
-const { day, todayBg, finishCount } = toRefs(data);
+const { day, todayBg, showAnimaRain: loginedSameDay } = toRefs(data);
 </script>
 
 <style lang="scss">

@@ -1,30 +1,30 @@
 import { createPlans } from '@/constants';
-import { IPlan } from '@/types/plan';
-import { log } from '@/utils/log';
 import { PlanTypeEnum } from '@/constants/enum';
+import { IPlan } from '@/types/plan';
+import { getStorageSync, setStorageSync } from '@/utils/storage';
 
 class PlanStorage {
   public getPlanList = (): Promise<IPlan[]> => {
-    const planList = uni.getStorageSync('planinfo');
+    const planList = getStorageSync('planinfo');
 
     if (!planList) {
-      uni.setStorageSync('planinfo', []);
+      setStorageSync('planinfo', []);
+    } else {
+      // 按创建时间排序
+      planList.sort((x, y) => y.create_time - x.create_time);
+      // 置顶时间排序
+      planList.sort((x, y) => (y.top_time || 0) - (x.top_time || 0));
     }
-
-    // 按创建时间排序
-    planList.sort((x, y) => y.create_time - x.create_time);
-    // 置顶时间排序
-    planList.sort((x, y) => (y.top_time || 0) - (x.top_time || 0));
 
     return Promise.resolve(planList || []);
   };
 
   public addPlan = (plan: IPlan) => {
-    const planList: IPlan[] = uni.getStorageSync('planinfo');
+    const planList: IPlan[] = getStorageSync('planinfo');
 
     planList.push(plan);
     try {
-      uni.setStorageSync('planinfo', planList);
+      setStorageSync('planinfo', planList);
     } catch (error) {
       // 超过最大缓存容量10MB
       uni.showModal({
@@ -39,21 +39,21 @@ class PlanStorage {
   };
 
   public delPlan = (plan_no: string) => {
-    const planList: IPlan[] = uni.getStorageSync('planinfo') || [];
+    const planList: IPlan[] = getStorageSync('planinfo') || [];
     const findIndex = planList.findIndex((m) => m.plan_no === plan_no);
 
     planList.splice(findIndex, 1);
-    uni.setStorageSync('planinfo', planList);
+    setStorageSync('planinfo', planList);
 
     return Promise.resolve(null);
   };
 
   public updatePlan = (plan: IPlan) => {
-    const planList: IPlan[] = uni.getStorageSync('planinfo') || [];
+    const planList: IPlan[] = getStorageSync('planinfo') || [];
     const findIndex = planList.findIndex((m) => m.plan_no === plan.plan_no);
 
     planList[findIndex] = plan;
-    uni.setStorageSync('planinfo', planList);
+    setStorageSync('planinfo', planList);
 
     return Promise.resolve(null);
   };
@@ -63,11 +63,11 @@ class PlanStorage {
   };
 
   /**
-   * 
+   *
    * @param type '0' 取消置顶，'1' 置顶
    */
   public setTop = (planNo: string, type: '0' | '1') => {
-    const planList: IPlan[] = uni.getStorageSync('planinfo') || [];
+    const planList: IPlan[] = getStorageSync('planinfo') || [];
     const findIndex = planList.findIndex((m) => m.plan_no === planNo);
 
     if (type === '0') {
@@ -76,7 +76,7 @@ class PlanStorage {
       planList[findIndex].top_time = Date.now(); // 添加置顶时间
     }
 
-    uni.setStorageSync('planinfo', planList);
+    setStorageSync('planinfo', planList);
     return Promise.resolve(null);
   };
 
@@ -94,11 +94,10 @@ class PlanStorage {
         // 这么做相比写 todolist 有什么区别？
         // 因为这里只记录你短期内要完成的事情，你能更专注的处理它们。空闲时间就回来扫视下待办列表一并 kill 掉。
 
-
         // 举个栗子：
-      })
+      });
     })();
-  }
+  };
 }
 
 export const planStorage = new PlanStorage();
