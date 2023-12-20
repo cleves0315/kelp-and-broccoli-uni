@@ -39,6 +39,9 @@ class UserStorage {
       this.user.update_time = Date.now();
       this.user.update_time_day = Date.now();
       setStorageSync('userinfo', this.user);
+    } else if (typeof this.user.update_time_day === 'undefined') {
+      this.user.update_time = Date.now();
+      this.user.update_time_day = Date.now();
     }
   };
 

@@ -102,7 +102,7 @@ const verifyUpdateDayTime = (newTime: number) => {
   if (typeof storgDayTime === 'undefined') {
     data.showAnimaRain = true;
   } else {
-    data.showAnimaRain = !isSameDay(storgDayTime, newTime);
+    data.showAnimaRain = !isSameDay(Number(storgDayTime), Number(newTime));
   }
 
   if (newTime) {
