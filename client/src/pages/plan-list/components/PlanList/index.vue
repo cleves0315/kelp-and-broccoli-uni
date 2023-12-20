@@ -1,9 +1,9 @@
 <template>
-  <div class="plan-list" :class="{ hidden: !props.visibility }"
-    :style="{ height: _height !== null ? `${_height}px` : 'auto' }">
-    <div id="planListRef">
-      <template v-for="plan in props.list" :key="plan.plan_no">
-        <PlanItem id="planItem" ref="planItem" :plan="plan" @long-touch="$emit('longTouchItem', plan)" />
+  <div class="plan-list" :class="{ hidden: !visibility }" :style="{ height: _height !== null ? `${_height}px` : 'auto' }">
+    <div id="planListRef" style="padding: 10px 0;">
+      <template v-for="(plan, index) in props.list" :key="plan.plan_no">
+        <PlanItem id="planItem" ref="planItem" :plan="plan" :strong="strongIndex === index"
+          @long-touch="$emit('longTouchItem', plan, index)" />
       </template>
     </div>
   </div>
@@ -11,12 +11,13 @@
 
 <script lang="ts" setup>
 import { IPlan } from '@/types/plan';
-import { reactive, defineProps, onMounted, getCurrentInstance, toRefs, watch } from 'vue';
+import { reactive, defineProps, onMounted, getCurrentInstance, toRefs, watch, } from 'vue';
 import PlanItem from '../PlanItem/index.vue';
 
 export interface Props {
   list?: IPlan[];
   visibility?: boolean;
+  strongIndex?: number;
 }
 
 const emit = defineEmits(['longTouchItem'])

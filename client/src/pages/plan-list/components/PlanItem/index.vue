@@ -1,9 +1,9 @@
 <template>
-  <LongTouch @longTouch="isLongTouch = true; scale = false; $emit('longTouch', plan)">
-    <div class="plan-item" :class="{ scale: scale }">
+  <LongTouch @longTouch="isLongTouch = true; touching = false; $emit('longTouch', plan)" :delay="200">
+    <div class="plan-item" :class="{ touching: touching, strong: strong }">
       <div id="planRef" ref="planRef" class="plan-item-wrap" :class="{ moving: moving }"
-        :style="distance !== 0 ? `transform: translateX(${distance}px)` : ''" @touchstart="scale = true"
-        @touchmove="scale = false" @touchend="scale = false">
+        :style="distance !== 0 ? `transform: translateX(${distance}px)` : ''" @touchstart="touching = true"
+        @touchmove="touching = false" @touchend="touching = false">
         <div class="operation">
           <Ident :checked="plan.is_finish" :onClick="onChangeFinish" />
         </div>
@@ -36,9 +36,9 @@
         </div>
       </div>
 
-      <div class="delete-wrap" :class="{ moving: moving }" @click="onDelete" :style="{ width: `${-distance}px` }">
+      <!-- <div class="delete-wrap" :class="{ moving: moving }" @click="onDelete" :style="{ width: `${-distance}px` }">
         <image class="delete-icon" :src="delIcon"></image>
-      </div>
+      </div> -->
     </div>
   </LongTouch>
 </template>
@@ -61,7 +61,7 @@ import { PlanTypeEnum } from '@/constants/enum';
 
 export type PlantItemProps = {
   plan: IPlan;
-  touch?: string;
+  strong?: boolean;
 };
 
 const props = defineProps<PlantItemProps>();
@@ -85,7 +85,7 @@ const data = reactive({
 });
 
 const isLongTouch = ref(false);
-const scale = ref(false);
+const touching = ref(false);
 
 // 手指移动临时状态
 let touchX = 0,
@@ -259,19 +259,19 @@ const intoDetail = () => {
   });
 };
 
-const onDelete = async () => {
-  // 两下震动
-  uni.vibrateShort({ type: 'heavy' } as any);
-  setTimeout(() => uni.vibrateShort({ type: 'heavy' } as any), 200);
+// const onDelete = async () => {
+//   // 两下震动
+//   uni.vibrateShort({ type: 'heavy' } as any);
+//   setTimeout(() => uni.vibrateShort({ type: 'heavy' } as any), 200);
 
-  uni.showActionSheet({
-    itemList: ['删除计划'],
-    itemColor: '#EA3927',
-    success: () => {
-      store.delPlan(plan.plan_no);
-    },
-  });
-};
+//   uni.showActionSheet({
+//     itemList: ['删除计划'],
+//     itemColor: '#EA3927',
+//     success: () => {
+//       store.delPlan(plan.plan_no);
+//     },
+//   });
+// };
 
 defineExpose({
   setDistance,
@@ -289,11 +289,17 @@ const { liveToday, overIcon, overIconExpired, bookIcon, remindIcon, delIcon, dis
   border-radius: 20rpx;
   margin-bottom: 6rpx;
   background-color: #fefefe;
-  transition: transform .2s ease;
+  transition: transform .24s ease;
   box-shadow: 0 5rpx 10rpx rgba(0, 0, 0, 0.05);
 
-  &.scale {
-    transform: scale(.96);
+  &.touching {
+    background-color: #D8D8D8;
+  }
+
+  &.strong {
+    transform: scale(1.04, 1.1);
+    box-shadow: 0 5rpx 18rpx rgb(114, 114, 114, .6);
+    z-index: 1;
   }
 
   .plan-item-wrap {

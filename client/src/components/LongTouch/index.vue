@@ -7,9 +7,13 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 
-const emit = defineEmits(['longTouch']);
+interface Props {
+  delay?: number;
+}
 
-const delay = 400; // ms
+const emit = defineEmits(['longTouch']);
+const { delay = 400 } = defineProps<Props>();
+
 const timer = ref();
 const start = ref({ x: undefined, y: undefined });
 
@@ -26,7 +30,7 @@ const onTouchMove = (e: TouchEvent) => {
   const diffX = Math.abs(clientX - start.value.x);
   const diffY = Math.abs(clientY - start.value.y);
 
-  if (diffX >= 20 || diffY >= 20) {
+  if (diffX >= 1 || diffY >= 1) {
     clearTimeout(timer.value);
   }
 }

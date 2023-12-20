@@ -2,7 +2,7 @@
   <div class="plan-list-page" :class="{ 'no-scroll': store.touching === 'horizontal' }">
     <CustomNavigationBar :title="naviBarTitle()" :bgColor="decorateBgColor()" :onBack="handleNaviBarBack" />
     <Headers :title="naviBarTitle()" />
-    <PlanList :list="todoList" @long-touch-item="handleOnLongTouchListItem" />
+    <PlanList :list="todoList" :strongIndex="strongIndex" @long-touch-item="handleOnLongTouchListItem" />
     <MarkBtn class-name="mark-btn" :direction="checkFinish" :onClick="handleClickMark" />
     <PlanList :visibility="checkFinish" :list="finisheList()" />
     <FooterInput inputPlaceTxt="添加任务" :confirm="handleConfrim" />
@@ -15,7 +15,7 @@ import MarkBtn from './components/MarkBtn/index.vue';
 import FooterInput from '@/components/FooterInput/index.vue';
 import CustomNavigationBar from '@/components/CustomNavigationBar/index.vue';
 import PlanList from './components/PlanList/index.vue';
-import { onBeforeMount, computed, reactive, toRefs } from 'vue';
+import { onBeforeMount, computed, reactive, toRefs, ref } from 'vue';
 import { usePlanStore } from '@/stores/plan';
 import { IPlan } from '@/types/plan';
 import { PlanTypeEnum } from '@/constants/enum';
@@ -29,6 +29,7 @@ interface State {
   backUrl: string;
   planList: IPlan[];
   checkFinish: boolean;
+  strongIndex: number
 }
 
 const store = usePlanStore();
@@ -40,6 +41,7 @@ const data = reactive<State>({
   backUrl: type === PlanTypeEnum.today ? getGlobalData('todayBack') : '',
   planList: [],
   checkFinish: false,
+  strongIndex: -1,
 });
 
 const plnaList = () => {
@@ -80,30 +82,37 @@ const handleConfrim = (val: string) => {
   store.addPlan(val, type as PlanTypeEnum);
 };
 
-const handleOnLongTouchListItem = async (plan: IPlan) => {
+const handleOnLongTouchListItem = async (plan: IPlan, index: number) => {
+  data.strongIndex = index;
   uni.vibrateShort({ type: 'heavy' });
   const itemList = [plan.top_time ? '取消置顶' : '置顶', '删除'];
 
-  const { tapIndex } = await uni.showActionSheet({
-    title: plan.title,
-    itemList: itemList,
-  })
+  try {
+    const { tapIndex } = await uni.showActionSheet({
+      title: plan.title,
+      itemList: itemList,
+    })
 
-  switch (tapIndex) {
-    case 0:
-      store.setTop(plan.plan_no);
-      break;
-    case 1:
-      store.delPlan(plan.plan_no);
-      break;
+    switch (tapIndex) {
+      case 0:
+        store.setTop(plan.plan_no);
+        break;
+      case 1:
+        store.delPlan(plan.plan_no);
+        break;
 
-    default:
-      break;
+      default:
+        break;
+    }
+  } catch (error) {
+  } finally {
+    strongIndex.value = -1;
   }
+  console.log('dataa: ', data);
 
 }
 
-const { backUrl, checkFinish } = toRefs(data);
+const { backUrl, checkFinish, strongIndex } = toRefs(data);
 </script>
 
 <style lang="scss">
