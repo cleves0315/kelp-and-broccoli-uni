@@ -6,7 +6,8 @@
       <div v-else class="add-icon"></div>
     </div>
     <input class="operation-text" :class="{ focus: focus }" placeholder="下一步" v-model="value"
-      :placeholderClass="focus ? 'focus-placeholder' : 'input-placeholder'" @focus="focus = true" @blur="handleOnBlur" />
+      :placeholderClass="focus ? 'focus-placeholder' : 'input-placeholder'" :focus="!!focus" @focus="focus = true"
+      @blur="handleOnBlur" @confirm="handleOnConfirm" />
   </div>
 </template>
 
@@ -39,6 +40,12 @@ const handleOnBlur = (e) => {
     store.addStep(detailStore.plan.plan_no, value);
   }
 };
+
+const handleOnConfirm = () => {
+  setTimeout(() => {
+    data.focus = true
+  }, 100);
+}
 
 const { focus, value, touching } = toRefs(data);
 </script>
