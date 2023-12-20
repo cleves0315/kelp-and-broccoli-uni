@@ -1,7 +1,26 @@
 {
   "editor.formatOnSave": true,
+  "eslint.codeActionsOnSave.mode": "problems",
+  "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact", "json", "graphql"],
+  "typescript.tsdk": "node_modules/typescript/lib",
   "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "prettier.printWidth": 110,
+  "[css]": {
+    "editor.defaultFormatter": "MikeBovenlander.formate"
+  },
+  "[less]": {
+    "editor.defaultFormatter": "MikeBovenlander.formate"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "explicit"
   }
 }
