@@ -17,7 +17,7 @@
             </view>
             <!-- 我的一天 -->
             <view class="tips-block" v-if="plan.type === PlanTypeEnum.today">
-              <div class="split"></div>
+              <div v-if="!!plan.top_time" class="split"></div>
               <image class="icon" :src="liveToday"></image>
               <text class="txt">我的一天</text>
             </view>
