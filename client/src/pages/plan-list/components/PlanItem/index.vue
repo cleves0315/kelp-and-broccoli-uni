@@ -10,8 +10,14 @@
         <div class="plan-item-content" @click="handleOnClickItem">
           <div class="head" :class="{ finished: plan.is_finish }">{{ plan.title }}</div>
           <div class="detail-content">
+            <!-- 置顶 -->
+            <view class="tips-block" v-if="!!plan.top_time">
+              <image class="icon" style="margin-right: 4rpx;" :src="topIcon"></image>
+              <text class="txt" style="color: #07b45b; font-size: 20rpx; font-weight: 500;">Top</text>
+            </view>
             <!-- 我的一天 -->
             <view class="tips-block" v-if="plan.type === PlanTypeEnum.today">
+              <div class="split"></div>
               <image class="icon" :src="liveToday"></image>
               <text class="txt">我的一天</text>
             </view>
@@ -56,6 +62,7 @@ import dateOver from '@/assets/plan/date_over.svg';
 import bookSvg from '@/assets/plan/book.svg';
 import bell from '@/assets/plan/bell.svg';
 import delSvg from '@/assets/del_white.svg';
+import topSvg from '@/assets/plan/top.svg';
 import { usePlanStore } from '@/stores/plan';
 import { PlanTypeEnum } from '@/constants/enum';
 
@@ -79,6 +86,7 @@ const data = reactive({
   bookIcon: bookSvg, // 详情
   remindIcon: bell, // 提醒
   delIcon: delSvg, // 提醒
+  topIcon: topSvg, // 提醒
 
   distance: 0, // 手指滑动距离px（左边<0, 右边>0）
   moving: false, // 当前是否正在手势操作
@@ -277,7 +285,7 @@ defineExpose({
   setDistance,
 });
 
-const { liveToday, overIcon, overIconExpired, bookIcon, remindIcon, delIcon, distance, moving } =
+const { liveToday, overIcon, overIconExpired, bookIcon, remindIcon, topIcon, distance, moving } =
   toRefs(data);
 </script>
 
