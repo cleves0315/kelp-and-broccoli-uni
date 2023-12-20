@@ -3,20 +3,10 @@
     <div v-if="showMask" class="footer-input-mask"></div>
 
     <div class="container">
-      <div class="placeholder-mask" :class="{ focus: isFocus }">
-        {{ value ? '' : inputPlaceTxt }}
-      </div>
-      <input
-        class="input-box"
-        :class="{ 'input-changing': isFocus }"
-        v-model="value"
-        :maxlength="maxlength"
-        :adjust-position="adjustPosition"
-        @focus="handleOnFocus"
-        @blur="handleBlur"
-        @confirm="handleConfirm"
-        @keyboardheightchange="handleKeyboardheightchange"
-      />
+      <input class="input-box" :class="{ 'input-changing': isFocus }" v-model="value" :maxlength="maxlength"
+        :placeholder-class="`input-box-placeholder ${isFocus ? 'focus' : ''}`" :placeholder="inputPlaceTxt"
+        :adjust-position="adjustPosition" @focus="handleOnFocus" @blur="handleBlur" @confirm="handleConfirm"
+        @keyboardheightchange="handleKeyboardheightchange" />
       <div class="input-place">
         <image v-if="!isFocus" class="blur-icon" src="./add.svg"></image>
         <div v-else class="focus-icon"></div>
@@ -52,7 +42,7 @@ const {
   maxlength = -1,
   adjustPosition = false,
   // inputPlaceIcon = './add.svg',
-  confirm = () => {},
+  confirm = () => { },
 } = props;
 
 const data: Data = reactive({
@@ -116,6 +106,15 @@ const { showMask, cursorSpacing, value, isFocus } = toRefs(data);
     }
   }
 
+  .input-box-placeholder {
+    color: #fefefe;
+    font-size: 30rpx;
+
+    &.focus {
+      color: #767678;
+    }
+  }
+
   .footer-input-mask {
     position: fixed;
     top: 0;
@@ -172,6 +171,7 @@ const { showMask, cursorSpacing, value, isFocus } = toRefs(data);
       height: 46rpx;
       margin-right: 30rpx;
     }
+
     .focus-icon {
       width: 46rpx;
       height: 46rpx;
@@ -186,6 +186,7 @@ const { showMask, cursorSpacing, value, isFocus } = toRefs(data);
       color: #767678;
     }
   }
+
   input::-webkit-input-placeholder {
     color: #fefefe;
   }
