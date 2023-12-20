@@ -101,6 +101,7 @@ const handleOnLongTouchListItem = async (plan: IPlan, index: number) => {
         const res = await uni.showModal({ title: plan.title, content: '确定删除该计划？', })
         if (res.confirm === true) {
           store.delPlan(plan.plan_no);
+          uni.showToast({ title: '删除成功', icon: 'none', })
         }
         break;
 
