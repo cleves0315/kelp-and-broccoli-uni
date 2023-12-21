@@ -23,14 +23,13 @@ import { getGlobalData, initCloud, setGlobalData } from '@/utils/common';
 import { isSameDay } from '@/utils/day';
 import { getStorageSync, setStorageSync } from '@/utils/storage';
 import { onLoad, onShareAppMessage, onShow } from '@dcloudio/uni-app';
-import { computed, reactive, toRefs } from 'vue';
+import { computed, reactive, ref, toRefs } from 'vue';
 import Banner from './components/Banner/index.vue';
 import Contents from './components/Contents/index.vue';
 import FooterBtn from './components/FooterBtn/index.vue';
 import Headers from './components/Header/index.vue';
 
 export interface State {
-  toBack: boolean;
   footerBtnTxt: string;
   day?: number;
   /** 不是当天则会有落雨动画 */
@@ -41,8 +40,8 @@ export interface State {
 
 const store = usePlanStore();
 
+const initted = ref(false);
 const data = reactive<State>({
-  toBack: false,
   footerBtnTxt: '',
   day: 1,
   finishCount: 0,
@@ -71,6 +70,7 @@ const init = async () => {
   fetchPlanList();
   fetchTodayBgImg();
   uni.hideLoading();
+  initted.value = true;
 };
 
 onLoad(() => {
@@ -79,7 +79,7 @@ onLoad(() => {
 });
 
 onShow(() => {
-  if (data.toBack) {
+  if (initted) {
     // 获取最新天数和计划
     fetchUserDay();
     fetchPlanList();
@@ -140,7 +140,6 @@ const getTodayPercentage = () => {
 };
 
 const intoPlanList = () => {
-  data.toBack = true;
   uni.navigateTo({
     url: `/pages/plan-list/index?type=${PlanTypeEnum.all}`,
   });

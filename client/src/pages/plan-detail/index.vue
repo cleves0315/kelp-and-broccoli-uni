@@ -18,7 +18,6 @@ import { usePlanStore } from '@/stores/plan';
 import { usePlanDetailStore } from '@/stores/planDetail';
 import { requestSubscribeMessage } from '@/utils/common';
 import { onHide, onLoad, onUnload } from '@dcloudio/uni-app';
-import { computed } from 'vue';
 import CalendarModal from './components/CalendarModal/index.vue';
 import Describe from './components/Describe/index.vue';
 import Footers from './components/Footer/index.vue';
@@ -40,12 +39,12 @@ onLoad(() => {
   detailStore.setPlan(store.planList.find((m) => m.plan_no === plan_no));
 });
 
-const isWiki = computed(() => {
+const isWiki = () => {
   return detailStore.plan.plan_no === PlanNoEnum.wiki;
-});
+};
 
 const handleWikiTitle = () => {
-  if (isWiki && typeof detailStore.plan.read_time === 'undefined') {
+  if (isWiki() && typeof detailStore.plan.read_time === 'undefined') {
     return `使用建议（长按）`;
   }
   return detailStore.plan.title;
@@ -53,7 +52,7 @@ const handleWikiTitle = () => {
 
 const updatePlan = () => {
   const data = Object.assign({}, detailStore.plan, {
-    title: isWiki ? handleWikiTitle() : detailStore.plan.title,
+    title: isWiki() ? handleWikiTitle() : detailStore.plan.title,
     read_time: Date.now()
   });
 

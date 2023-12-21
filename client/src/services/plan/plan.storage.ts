@@ -93,6 +93,10 @@ class PlanStorage {
 
     this.addPlan(initialPlans);
   };
+
+  // public notifiPlan = () => {
+
+  // }
 }
 
 export const planStorage = new PlanStorage();
