@@ -1,7 +1,7 @@
 import { createPlans, initStep } from '@/constants';
 import { PlanTypeEnum } from '@/constants/enum';
 import { planService } from '@/services';
-import { IPlan, IRepeat, IStep } from '@/types/plan';
+import { IPlan } from '@/types/plan';
 import { uuid } from '@/utils/uuid';
 import { defineStore } from 'pinia';
 
@@ -12,26 +12,8 @@ export interface State {
   touching: 'horizontal' | 'vertical' | '';
 }
 
-export interface SetPlan {
-  /** 计划名称 */
-  title?: string;
-  /** 计划类型 */
-  type?: 'all' | 'today';
-  /** 详情描述 */
-  detail?: string;
-  /** 是否完成 */
-  is_finish?: boolean;
-  /** 截止时间 */
-  closing_date?: number;
-  /** 子计划列表 */
-  stepList?: IStep[];
-  /** 重复信息 */
-  repeat?: IRepeat | {};
-  /** 完成时间 */
-  finish_date?: number;
-  /** 提醒时间 */
-  remind_time?: number;
-}
+export interface SetPlan
+  extends Partial<Omit<IPlan, '_id' | 'plan_no' | 'user_id' | 'open_id' | 'create_time'>> {}
 
 export const usePlanStore = defineStore('planList', {
   state: (): State => ({

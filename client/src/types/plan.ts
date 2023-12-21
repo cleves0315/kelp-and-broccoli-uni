@@ -29,6 +29,8 @@ export type IPlan = {
   remind_time?: number;
   /** 置顶时间 */
   top_time?: number;
+  /** 阅读时间 */
+  read_time?: number;
 };
 
 export type IStep = {

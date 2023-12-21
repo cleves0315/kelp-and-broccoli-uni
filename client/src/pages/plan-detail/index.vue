@@ -12,18 +12,19 @@
 </template>
 
 <script lang="ts" setup>
-import CalendarModal from './components/CalendarModal/index.vue';
-import TodoList from './components/TodoList/index.vue';
-import List from './components/List/index.vue';
-import Describe from './components/Describe/index.vue';
-import Footers from './components/Footer/index.vue';
+import { SUB_TEMPLATE_IDS } from '@/constants';
+import { PlanIconTypeEnum, PlanNoEnum, PlanTypeEnum } from '@/constants/enum';
 import { usePlanStore } from '@/stores/plan';
 import { usePlanDetailStore } from '@/stores/planDetail';
-import { PlanTypeEnum, PlanIconTypeEnum } from '@/constants/enum';
 import { requestSubscribeMessage } from '@/utils/common';
-import { SUB_TEMPLATE_IDS } from '@/constants';
-import PickerTime from './components/picker-time/index.vue';
 import { onHide, onLoad, onUnload } from '@dcloudio/uni-app';
+import { computed } from 'vue';
+import CalendarModal from './components/CalendarModal/index.vue';
+import Describe from './components/Describe/index.vue';
+import Footers from './components/Footer/index.vue';
+import List from './components/List/index.vue';
+import TodoList from './components/TodoList/index.vue';
+import PickerTime from './components/picker-time/index.vue';
 
 export interface Props {
   plan_no: string;
@@ -39,15 +40,35 @@ onLoad(() => {
   detailStore.setPlan(store.planList.find((m) => m.plan_no === plan_no));
 });
 
+const isWiki = computed(() => {
+  return detailStore.plan.plan_no === PlanNoEnum.wiki;
+});
+
+const handleWikiTitle = () => {
+  if (isWiki && typeof detailStore.plan.read_time === 'undefined') {
+    return `使用建议（长按）`;
+  }
+  return detailStore.plan.title;
+}
+
+const updatePlan = () => {
+  const data = Object.assign({}, detailStore.plan, {
+    title: isWiki ? handleWikiTitle() : detailStore.plan.title,
+    read_time: Date.now()
+  });
+
+  store.updatePlan(detailStore.plan.plan_no, data, true);
+}
+
 onHide(() => {
   if (detailStore.plan) {
-    store.updatePlan(detailStore.plan.plan_no, detailStore.plan, true);
+    updatePlan();
   }
 });
 
 onUnload(() => {
   if (detailStore.plan) {
-    store.updatePlan(detailStore.plan.plan_no, detailStore.plan, true);
+    updatePlan();
     detailStore.setPlan(undefined);
   }
 });
@@ -178,7 +199,7 @@ const remindActionSheet = async () => {
         remind_time: sheetTime,
       });
     }
-  } catch (error) {}
+  } catch (error) { }
 };
 
 /**
@@ -227,7 +248,7 @@ const endDateActionSheet = async () => {
         });
         break;
     }
-  } catch (error) {}
+  } catch (error) { }
 };
 
 /** 点击日历弹窗返回按钮 */
