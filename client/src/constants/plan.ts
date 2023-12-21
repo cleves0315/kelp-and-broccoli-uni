@@ -1,7 +1,7 @@
 import { IPlan, IStep } from '@/types/plan';
-import { PlanTypeEnum } from './enum';
-import { uuid } from '@/utils/uuid';
 import { getGlobalData } from '@/utils/common';
+import { uuid } from '@/utils/uuid';
+import { PlanTypeEnum } from './enum';
 
 export const defaultPlan: IPlan = {
   plan_no: '',
@@ -26,17 +26,18 @@ export const initStep: IStep = {
   is_finish: false,
 };
 
-
-export interface InitPlansParams extends Partial<Omit<IPlan, 'plan_no' | 'user_id' | 'create_time' | 'update_time'>> {
+export interface InitPlansParams
+  extends Partial<Omit<IPlan, 'plan_no' | 'user_id' | 'create_time' | 'update_time'>> {
   title: string;
   type: PlanTypeEnum;
 }
 
 export const createPlans = (params: InitPlansParams): IPlan => {
-  return Object.assign({
+  const staticField = {
     plan_no: uuid(),
     user_id: getGlobalData('user_id'),
     create_time: Date.now(),
     update_time: Date.now(),
-  }, defaultPlan, params);
-}
+  };
+  return Object.assign({}, defaultPlan, staticField, params);
+};

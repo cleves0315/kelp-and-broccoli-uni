@@ -1,9 +1,7 @@
-import { defaultPlan, createPlans, initStep } from '@/constants';
+import { createPlans, initStep } from '@/constants';
 import { PlanTypeEnum } from '@/constants/enum';
 import { planService } from '@/services';
 import { IPlan, IRepeat, IStep } from '@/types/plan';
-import { getGlobalData } from '@/utils/common';
-import { log } from '@/utils/log';
 import { uuid } from '@/utils/uuid';
 import { defineStore } from 'pinia';
 
@@ -47,7 +45,7 @@ export const usePlanStore = defineStore('planList', {
     },
 
     addPlan(title: string, type: PlanTypeEnum) {
-      const data = createPlans({ title, type, });
+      const data = createPlans({ title, type });
 
       this.planList.unshift(data);
       planService.addPlan(data);
@@ -103,26 +101,26 @@ export const usePlanStore = defineStore('planList', {
       const plan = this.planList.find((item, i) => {
         index = i;
         return item.plan_no === planNo;
-      })
+      });
 
       const intoTop = () => {
         plan.top_time = Date.now();
         this.planList.splice(index, 1);
         this.planList.unshift(plan);
-      }
+      };
       const resetPosition = () => {
         delete plan.top_time;
         // 按创建时间排序
         this.planList.sort((x, y) => y.create_time - x.create_time);
-      }
+      };
 
       if (plan.top_time) {
-        resetPosition()
+        resetPosition();
         planService.setTop(planNo, '0');
       } else {
         intoTop();
         planService.setTop(planNo, '1');
       }
-    }
+    },
   },
 });
