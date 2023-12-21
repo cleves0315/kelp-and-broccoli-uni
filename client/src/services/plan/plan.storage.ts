@@ -84,9 +84,10 @@ class PlanStorage {
     const initialPlans = (() => {
       return createPlans({
         plan_no: PlanNoEnum.wiki,
-        title: '使用须知',
+        title: '使用建议',
         type: PlanTypeEnum.all,
         detail: wiki,
+        top_time: Date.now(),
       });
     })();
 
