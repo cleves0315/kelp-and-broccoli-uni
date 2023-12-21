@@ -12,10 +12,10 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, toRefs } from 'vue';
 import Ident from '@/components/Ident/index.vue';
 import { usePlanStore } from '@/stores/plan';
 import { usePlanDetailStore } from '@/stores/planDetail';
+import { reactive, toRefs } from 'vue';
 
 export interface Props {
   // checkedBackgroundColor?: string; // 选中后的背景颜色
@@ -41,10 +41,13 @@ const handleOnBlur = (e) => {
   }
 };
 
-const handleOnConfirm = () => {
-  setTimeout(() => {
-    data.focus = true
-  }, 100);
+const handleOnConfirm = (e) => {
+  const value = e.detail.value.trim() as string;
+  if (value) {
+    setTimeout(() => {
+      data.focus = true
+    }, 300);
+  }
 }
 
 const { focus, value, touching } = toRefs(data);

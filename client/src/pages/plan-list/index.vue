@@ -78,6 +78,9 @@ const handleClickMark = () => {
 };
 
 const handleConfrim = (val: string) => {
+  if (!val?.trim()) {
+    return;
+  }
   uni.vibrateShort({ type: 'heavy' });
   store.addPlan(val, type as PlanTypeEnum);
 };

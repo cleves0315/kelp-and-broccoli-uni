@@ -46,7 +46,8 @@ const handleBlur = (e) => {
   });
 };
 
-const handleDelete = async () => {
+const handleDelete = async (e: MouseEvent) => {
+  e.stopPropagation();
   // 震动
   uni.vibrateShort({ type: 'heavy' });
 
@@ -67,6 +68,7 @@ const { touching } = toRefs(data);
   display: flex;
   align-items: center;
   padding: 20rpx 40rpx;
+  padding-right: 0;
 
   &.touch {
     background-color: #ecf0f1;
@@ -91,8 +93,9 @@ const { touching } = toRefs(data);
 
   .del-btn-wrap {
     position: relative;
-    width: 50rpx;
-    height: 50rpx;
+    width: 106rpx;
+    height: 52rpx;
+    overflow: hidden;
   }
 
   .del-btn::after,
@@ -101,7 +104,7 @@ const { touching } = toRefs(data);
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 48%;
+    width: 26rpx;
     height: 2rpx;
     border-radius: 999rpx;
     background: #7c7c80;
