@@ -79,11 +79,11 @@ onLoad(() => {
 });
 
 onShow(() => {
-  if (initted) {
-    // 获取最新天数和计划
-    fetchUserDay();
-    fetchPlanList();
-  }
+  // if (initted) {
+  //   // 获取最新天数和计划
+  //   fetchUserDay();
+  //   fetchPlanList();
+  // }
 });
 
 onShareAppMessage(() => {

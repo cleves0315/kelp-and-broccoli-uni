@@ -1,5 +1,5 @@
 import { createPlans, wiki } from '@/constants';
-import { PlanNoEnum, PlanTypeEnum } from '@/constants/enum';
+import { PlanNoEnum } from '@/constants/enum';
 import { IPlan } from '@/types/plan';
 import { getStorageSync, setStorageSync } from '@/utils/storage';
 
@@ -85,7 +85,6 @@ class PlanStorage {
       return createPlans({
         plan_no: PlanNoEnum.wiki,
         title: '使用建议',
-        type: PlanTypeEnum.all,
         detail: wiki,
         top_time: Date.now(),
       });
@@ -94,9 +93,18 @@ class PlanStorage {
     this.addPlan(initialPlans);
   };
 
-  // public notifiPlan = () => {
+  // public noticePlan = () => {
+  //   const noticePlans = (() => {
+  //     return createPlans({
+  //       plan_no: PlanNoEnum.wiki,
+  //       title: '使用建议',
+  //       detail: wiki,
+  //       top_time: Date.now(),
+  //     });
+  //   })();
 
-  // }
+  //   this.addPlan(noticePlans);
+  // };
 }
 
 export const planStorage = new PlanStorage();

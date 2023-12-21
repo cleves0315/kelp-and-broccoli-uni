@@ -5,6 +5,7 @@ export type IUseInfo = {
   create_time: number;
   update_time: number;
   update_time_day: number;
+  last_version?: number;
 };
 
 export interface GetUserInfoRes {

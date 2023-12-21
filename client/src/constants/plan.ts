@@ -12,7 +12,7 @@ export const defaultPlan: IPlan = {
   is_finish: false,
   create_time: 0,
   update_time: 0,
-  type: 'all',
+  type: PlanTypeEnum.all,
   closing_date: 0,
   step_list: [],
   repeat: {},
@@ -30,7 +30,6 @@ export interface InitPlansParams
   extends Partial<Omit<IPlan, 'plan_no' | 'user_id' | 'create_time' | 'update_time'>> {
   plan_no?: string;
   title: string;
-  type: PlanTypeEnum;
 }
 
 export const createPlans = (params: InitPlansParams): IPlan => {
