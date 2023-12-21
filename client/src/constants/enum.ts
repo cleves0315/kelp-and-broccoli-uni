@@ -50,3 +50,7 @@ export enum PlanIconTypeEnum {
   /** 重复 */
   // repeat = 'repeat',
 }
+
+export enum PlanNoEnum {
+  'wiki' = '001',
+}

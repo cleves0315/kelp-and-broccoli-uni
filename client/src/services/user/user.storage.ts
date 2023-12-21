@@ -1,5 +1,6 @@
 import { GetUserDayRes, GetUserInfoRes, IUseInfo } from '@/types/user';
 import { getStorageSync, setStorageSync } from '@/utils/storage';
+import { planStorage } from '../plan/plan.storage';
 
 class UserStorage {
   public user: IUseInfo = null;
@@ -19,6 +20,8 @@ class UserStorage {
         update_time: Date.now(),
         update_time_day: Date.now(),
       };
+
+      planStorage.initialPlan();
       setStorageSync('userinfo', defaultData);
       return Promise.resolve({ user: defaultData });
     }

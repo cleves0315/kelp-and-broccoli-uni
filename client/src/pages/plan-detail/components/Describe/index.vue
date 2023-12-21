@@ -1,7 +1,7 @@
 <template>
   <div class="describe-wrap">
     <textarea class="describe" :autoHeight="true" placeholder="添加备注" :cursor-spacing="12" :value="detailStore.plan.detail"
-      @blur="handleDescribeBlur" maxlength="200"></textarea>
+      @blur="handleDescribeBlur" :maxlength="-1"></textarea>
   </div>
 </template>
 
