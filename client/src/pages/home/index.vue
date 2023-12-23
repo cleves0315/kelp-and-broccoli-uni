@@ -8,7 +8,7 @@
       { label: '总数', value: store.planList.length },
     ]" />
     <FooterBtn content="所有计划" :onClick="intoPlanList" />
-    <AnimationRain :show="loginedSameDay" />
+    <AnimationRain :icon="animaIcon" :show="loginedSameDay" />
     <!-- 预加载"我的一天"背景图，此页面不做展示 -->
     <image class="today-bg-transparent" :src="todayBg"></image>
   </div>
@@ -29,6 +29,9 @@ import Contents from './components/Contents/index.vue';
 import FooterBtn from './components/FooterBtn/index.vue';
 import Headers from './components/Header/index.vue';
 
+import christmasTreeIcon from '@/assets/christmas_tree.png';
+import logoIcon from '@/assets/logo.png';
+
 export interface State {
   footerBtnTxt: string;
   day?: number;
@@ -36,17 +39,32 @@ export interface State {
   showAnimaRain?: boolean;
   finishCount: number;
   todayBg: string;
+  animaIcon?: string;
 }
+
+const christmasDay = () => {
+  const today = new Date();
+  const month = today.getMonth() + 1;
+  const day = today.getDate();
+
+  if (month === 12 && day === 25) {
+    return true
+  } else {
+    return false;
+  }
+}
+
 
 const store = usePlanStore();
 
-const initted = ref(false);
+const showed = ref(false);
 const data = reactive<State>({
   footerBtnTxt: '',
   day: 1,
   finishCount: 0,
   todayBg: '',
   showAnimaRain: true,
+  animaIcon: christmasDay() ? christmasTreeIcon : logoIcon
 });
 
 const init = async () => {
@@ -70,7 +88,6 @@ const init = async () => {
   fetchPlanList();
   fetchTodayBgImg();
   uni.hideLoading();
-  initted.value = true;
 };
 
 onLoad(() => {
@@ -79,11 +96,12 @@ onLoad(() => {
 });
 
 onShow(() => {
-  // if (initted) {
-  //   // 获取最新天数和计划
-  //   fetchUserDay();
-  //   fetchPlanList();
-  // }
+  if (showed.value) {
+    // 获取最新天数和计划
+    fetchUserDay();
+    fetchPlanList();
+  }
+  showed.value = true;
 });
 
 onShareAppMessage(() => {
@@ -145,7 +163,7 @@ const intoPlanList = () => {
   });
 };
 
-const { day, todayBg, showAnimaRain: loginedSameDay } = toRefs(data);
+const { day, todayBg, animaIcon, showAnimaRain: loginedSameDay } = toRefs(data);
 </script>
 
 <style lang="scss">
