@@ -8,14 +8,14 @@
       { label: '总数', value: store.planList.length },
     ]" />
     <FooterBtn content="所有计划" :onClick="intoPlanList" />
-    <AnimationRain :icon="animaIcon" :show="loginedSameDay" />
+    <AnimationRain :icon="animaIcon" :show="showAnimaRain" />
     <!-- 预加载"我的一天"背景图，此页面不做展示 -->
-    <image class="today-bg-transparent" :src="todayBg"></image>
+    <image v-if="!!todayBg" class="today-bg-transparent" :src="todayBg"></image>
   </div>
 </template>
 
 <script lang="ts" setup>
-import AnimationRain from '@/components/AnimationRain/index.vue';
+import AnimationRain, { AnimationRainProps } from '@/components/AnimationRain/index.vue';
 import { PlanTypeEnum } from '@/constants/enum';
 import { globalService, planService, userService } from '@/services';
 import { usePlanStore } from '@/stores/plan';
@@ -29,9 +29,6 @@ import Contents from './components/Contents/index.vue';
 import FooterBtn from './components/FooterBtn/index.vue';
 import Headers from './components/Header/index.vue';
 
-import christmasTreeIcon from '@/assets/christmas_tree.png';
-import logoIcon from '@/assets/logo.png';
-
 export interface State {
   footerBtnTxt: string;
   day?: number;
@@ -39,7 +36,7 @@ export interface State {
   showAnimaRain?: boolean;
   finishCount: number;
   todayBg: string;
-  animaIcon?: string;
+  animaIcon?: AnimationRainProps['icon'];
 }
 
 const christmasDay = () => {
@@ -63,8 +60,8 @@ const data = reactive<State>({
   day: 1,
   finishCount: 0,
   todayBg: '',
-  showAnimaRain: true,
-  animaIcon: christmasDay() ? christmasTreeIcon : logoIcon
+  showAnimaRain: false,
+  animaIcon: christmasDay() ? 'christmas' : 'logo'
 });
 
 const init = async () => {
@@ -163,7 +160,7 @@ const intoPlanList = () => {
   });
 };
 
-const { day, todayBg, animaIcon, showAnimaRain: loginedSameDay } = toRefs(data);
+const { day, todayBg, animaIcon, showAnimaRain } = toRefs(data);
 </script>
 
 <style lang="scss">

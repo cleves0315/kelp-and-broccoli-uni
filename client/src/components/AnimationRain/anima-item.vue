@@ -1,6 +1,6 @@
 <template>
   <div class="animation-rain-icon animi-icon1" :style="{
-    backgroundImage: `url(${icon})`,
+    backgroundImage: icon ? `url(${icon})` : undefined,
     '--icon-size': `${size}rpx`,
     '--icon-start-offset-right': `${animatParams.startOffsetRight}rpx`,
     '--icon-anima-time': `${animatParams.time}s`,
