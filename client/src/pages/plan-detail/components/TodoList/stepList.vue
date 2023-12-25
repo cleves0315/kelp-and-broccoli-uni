@@ -1,9 +1,10 @@
 <template>
-  <div class="plan-detail-step" :class="{ touch: touching }" @touchstart="touching = true" @touchend="touching = false">
+  <div class="plan-detail-step" :class="{ touch: touching }">
     <div class="ident-wrap">
       <Ident size="small" :checked="step.is_finish" :onClick="handleChangeState" />
     </div>
-    <input class="step-title" :class="{ finished: step.is_finish }" :value="step.title" @blur="handleBlur" />
+    <input class="step-title" :class="{ finished: step.is_finish }" :value="step.title" @touchstart="touching = true"
+      @touchend="touching = false" @blur="handleBlur" />
     <div class="del-btn-wrap" @click="handleDelete">
       <div class="del-btn"></div>
     </div>
