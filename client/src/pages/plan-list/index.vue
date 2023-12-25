@@ -4,7 +4,8 @@
     <Headers :title="naviBarTitle()" />
     <PlanList :list="todoList" :show-top="true" :strongIndex="strongIndex" @long-touch-item="handleOnLongTouchListItem" />
     <MarkBtn class-name="mark-btn" :direction="checkFinish" :onClick="handleClickMark" />
-    <PlanList :visibility="checkFinish" :showTop="false" :list="finisheList()" />
+    <PlanList :visibility="checkFinish" :showTop="false" :list="finisheList()"
+      @long-touch-item="handleOnLongTouchFinishListItem" />
     <FooterInput inputPlaceTxt="添加任务" :confirm="handleConfrim" />
   </div>
 </template>
@@ -85,10 +86,10 @@ const handleConfrim = (val: string) => {
   store.addPlan(val, type as PlanTypeEnum);
 };
 
-const handleOnLongTouchListItem = async (plan: IPlan, index: number) => {
+const handleLongTouchList = async (params: { plan: IPlan, index: number; itemList: string[] }) => {
+  const { index, itemList, plan } = params;
   data.strongIndex = index;
   uni.vibrateShort({ type: 'heavy' });
-  const itemList = [plan.top_time ? '取消置顶' : '置顶', '删除'];
 
   try {
     const { tapIndex } = await uni.showActionSheet({
@@ -96,27 +97,51 @@ const handleOnLongTouchListItem = async (plan: IPlan, index: number) => {
       itemList: itemList,
     })
 
-    switch (tapIndex) {
-      case 0:
-        store.setTop(plan.plan_no);
-        break;
-      case 1:
-        const res = await uni.showModal({ title: plan.title, content: '确定删除该计划？', })
-        if (res.confirm === true) {
-          store.delPlan(plan.plan_no);
-          uni.showToast({ title: '删除成功', icon: 'none', })
-        }
-        break;
-
-      default:
-        break;
-    }
+    return Promise.resolve(tapIndex);
   } catch (error) {
+    return Promise.reject(error);
   } finally {
     strongIndex.value = -1;
   }
-  console.log('dataa: ', data);
+}
 
+const handleOnLongTouchListItem = async (plan: IPlan, index: number) => {
+  const itemList = [plan.top_time ? '取消置顶' : '置顶', '删除'];
+  const tapIndex = await handleLongTouchList({ plan, index, itemList })
+
+  switch (tapIndex) {
+    case 0:
+      store.setTop(plan.plan_no);
+      break;
+    case 1:
+      const res = await uni.showModal({ title: plan.title, content: '确定删除该计划？', })
+      if (res.confirm === true) {
+        store.delPlan(plan.plan_no);
+        uni.showToast({ title: '删除成功', icon: 'none', })
+      }
+      break;
+
+    default:
+      break;
+  }
+}
+
+const handleOnLongTouchFinishListItem = async (plan: IPlan, index: number) => {
+  const itemList = ['删除'];
+  const tapIndex = await handleLongTouchList({ plan, index, itemList })
+
+  switch (tapIndex) {
+    case 0:
+      const res = await uni.showModal({ title: plan.title, content: '确定删除该计划？', })
+      if (res.confirm === true) {
+        store.delPlan(plan.plan_no);
+        uni.showToast({ title: '删除成功', icon: 'none', })
+      }
+      break;
+
+    default:
+      break;
+  }
 }
 
 const { backUrl, checkFinish, strongIndex } = toRefs(data);
