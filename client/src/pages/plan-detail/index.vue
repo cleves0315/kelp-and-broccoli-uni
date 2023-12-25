@@ -39,20 +39,20 @@ onLoad(() => {
   detailStore.setPlan(store.planList.find((m) => m.plan_no === plan_no));
 });
 
-const isWiki = () => {
-  return detailStore.plan.plan_no === PlanNoEnum.wiki;
+const isNotice = () => {
+  return detailStore.plan.type === 'notice' || detailStore.plan.plan_no === PlanNoEnum.wiki;
 };
 
-const handleWikiTitle = () => {
-  if (isWiki() && typeof detailStore.plan.read_time === 'undefined') {
-    return `使用建议（长按）`;
+const handleNoticeTitle = () => {
+  if (isNotice() && typeof detailStore.plan.read_time === 'undefined') {
+    return `${detailStore.plan.title}（长按删除）`;
   }
   return detailStore.plan.title;
 }
 
 const updatePlan = () => {
   const data = Object.assign({}, detailStore.plan, {
-    title: isWiki() ? handleWikiTitle() : detailStore.plan.title,
+    title: isNotice() ? handleNoticeTitle() : detailStore.plan.title,
     read_time: Date.now()
   });
 

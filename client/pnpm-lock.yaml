@@ -20,6 +20,7 @@ specifiers:
   '@dcloudio/vite-plugin-uni': 3.0.0-alpha-3061720230111001
   '@types/node': 18.7.18
   '@types/wechat-miniprogram': ^3.4.1
+  lodash: ^4.17.21
   pinia: 2.0.23
   prettier: 2.7.1
   sass: ^1.55.0
@@ -42,6 +43,7 @@ dependencies:
   '@dcloudio/uni-mp-toutiao': 3.0.0-alpha-3061720230111001_vue@3.3.10
   '@dcloudio/uni-mp-weixin': 3.0.0-alpha-3061720230111001_vue@3.3.10
   '@dcloudio/uni-quickapp-webview': 3.0.0-alpha-3061720230111001_vue@3.3.10
+  lodash: 4.17.21
   pinia: 2.0.23_au3oxzpu3yuskek7hxbrfnmxlm
   vue: 3.3.10_typescript@4.9.5
   vue-i18n: 9.8.0_vue@3.3.10
@@ -2051,6 +2053,10 @@ packages:
 
   /lodash.camelcase/4.3.0:
     resolution: {integrity: sha512-TwuEnCnxbc3rAvhf/LbG7tJUDzhqXyFnv3dtzLOPgCG/hODL7WFnsbwktkD7yUV0RrreP/l1PALq/YSg6VvjlA==}
+
+  /lodash/4.17.21:
+    resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
+    dev: false
 
   /lru-cache/5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}

@@ -81,7 +81,7 @@ const init = async () => {
     setGlobalData({ user_id: userId });
   }
 
-  fetchUserDay();
+  await fetchUserDay();
   fetchPlanList();
   fetchTodayBgImg();
   uni.hideLoading();
@@ -92,10 +92,10 @@ onLoad(() => {
   init();
 });
 
-onShow(() => {
+onShow(async () => {
   if (showed.value) {
     // 获取最新天数和计划
-    fetchUserDay();
+    await fetchUserDay();
     fetchPlanList();
   }
   showed.value = true;

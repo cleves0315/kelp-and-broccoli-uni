@@ -34,7 +34,7 @@ export interface InitPlansParams
 
 export const createPlans = (params: InitPlansParams): IPlan => {
   const staticField = {
-    plan_no: params.plan_no || uuid(),
+    plan_no: uuid(),
     user_id: getGlobalData('user_id'),
     create_time: Date.now(),
     update_time: Date.now(),
@@ -54,3 +54,8 @@ export const wiki = `——及时性待办清单是什么？\n
 这么做相比传统 todolist 有什么区别？\n
 因为这里只记录你短期内要完成的事情，这样你能更专注的处理它们。\n\n
 （空闲时间就回来扫视下待办列表，把没有完成的事情一并处理掉吧~）\n\n\n\n\n`;
+
+export const latestNotice = {
+  title: '新内容提醒',
+  detail: wiki,
+};

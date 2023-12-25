@@ -1,7 +1,9 @@
-import { createPlans, wiki } from '@/constants';
+import { createPlans, latestNotice, wiki } from '@/constants';
 import { PlanNoEnum } from '@/constants/enum';
 import { IPlan } from '@/types/plan';
 import { getStorageSync, setStorageSync } from '@/utils/storage';
+import { uuid } from '@/utils/uuid';
+import isEmpty from 'lodash/isEmpty';
 
 class PlanStorage {
   public getPlanList = (): Promise<IPlan[]> => {
@@ -86,6 +88,7 @@ class PlanStorage {
         plan_no: PlanNoEnum.wiki,
         title: '使用建议',
         detail: wiki,
+        type: 'notice',
         top_time: Date.now(),
       });
     })();
@@ -93,18 +96,21 @@ class PlanStorage {
     this.addPlan(initialPlans);
   };
 
-  // public noticePlan = () => {
-  //   const noticePlans = (() => {
-  //     return createPlans({
-  //       plan_no: PlanNoEnum.wiki,
-  //       title: '使用建议',
-  //       detail: wiki,
-  //       top_time: Date.now(),
-  //     });
-  //   })();
+  public addNoticePlan = async () => {
+    if (!isEmpty(latestNotice)) {
+      const noticePlans = (() => {
+        return createPlans({
+          plan_no: uuid(),
+          title: latestNotice.title,
+          detail: latestNotice.detail,
+          type: 'notice',
+          top_time: Date.now(),
+        });
+      })();
 
-  //   this.addPlan(noticePlans);
-  // };
+      this.addPlan(noticePlans);
+    }
+  };
 }
 
 export const planStorage = new PlanStorage();

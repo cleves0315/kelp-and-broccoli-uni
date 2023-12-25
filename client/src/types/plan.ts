@@ -15,8 +15,8 @@ export type IPlan = {
   create_time: number;
   /** 更新时间 */
   update_time: number;
-  /** 计划类型 all - 全局; today - 我的一天 */
-  type: 'all' | 'today';
+  /** 计划类型 all: 全局 | today: 我的一天 | notice: 通知 */
+  type: 'all' | 'today' | 'notice';
   /** 截止时间 */
   closing_date: number;
   /** 子计划列表 */
