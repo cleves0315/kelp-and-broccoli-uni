@@ -23,12 +23,12 @@ const handleClick = () => {
   onClick?.();
 };
 
-const {} = toRefs(data);
+const { } = toRefs(data);
 </script>
 
 <style lang="scss">
 .v-mark-btn {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   width: 140rpx;

@@ -3,7 +3,9 @@
     <CustomNavigationBar :title="naviBarTitle()" :bgColor="decorateBgColor()" :onBack="handleNaviBarBack" />
     <Headers :title="naviBarTitle()" />
     <PlanList :list="todoList" :show-top="true" :strongIndex="strongIndex" @long-touch-item="handleOnLongTouchListItem" />
-    <MarkBtn class-name="mark-btn" :direction="checkFinish" :onClick="handleClickMark" />
+    <div class="mark-btn-wrap" @click="handleClickMark">
+      <MarkBtn :direction="checkFinish" />
+    </div>
     <PlanList :visibility="checkFinish" :showTop="false" :list="finisheList()"
       @long-touch-item="handleOnLongTouchFinishListItem" />
     <FooterInput inputPlaceTxt="添加任务" :confirm="handleConfrim" />
@@ -167,8 +169,9 @@ const { backUrl, checkFinish, strongIndex } = toRefs(data);
     overflow-y: hidden;
   }
 
-  .mark-btn {
-    margin: 35rpx 20rpx;
+  .mark-btn-wrap {
+    display: inline-block;
+    padding: 35rpx 20rpx;
   }
 }
 
