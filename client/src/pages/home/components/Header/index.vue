@@ -2,8 +2,9 @@
   <div class="header">
     <div class="head">
       <div class="title">我在海带与西兰花</div>
-      <image class="logos" :class="{ 'touch-logo': touchLogo == 1, 'touch-end-logo': touchLogo == 2 }" mode="widthFix"
-        @touchstart="logoTouchStart" @touchend="logoTouchEnd" @click="handleOnClickLogo" :src="logo">
+      <image class="logos" :class="{ 'touching': !!touching }" :style="{
+        '--anima-time': `${animaTime / 1000}s`
+      }" mode="widthFix" @click="handleOnClickLogo" :src="logo">
       </image>
     </div>
     <div class="content">
@@ -19,49 +20,28 @@
 
 <script lang="ts" setup>
 import logo from '@/assets/logo.png';
-import { TouchLogo } from '@/constants/enum';
-import { reactive, ref, toRefs } from 'vue';
+import { ref } from 'vue';
 
 export interface Props {
   day?: number;
 }
 
 const timer = ref<NodeJS.Timeout>(null);
+/** 动画时间(ms) */
+const animaTime = ref(400);
+const touching = ref(false)
 const emit = defineEmits(['onClickLogo'])
 const { day = 0 } = defineProps<Props>();
-const data = reactive({
-  touchLogo: TouchLogo.normal,
-});
-
-const innerAudioContext = uni.createInnerAudioContext();
-// innerAudioContext.src = BO;
-
-const onPlay = () => {
-  // innerAudioContext.play();
-};
-
-const logoTouchStart = () => {
-  clearTimeout(timer.value);
-  data.touchLogo = TouchLogo.down;
-};
-
-const logoTouchEnd = () => {
-  data.touchLogo = TouchLogo.up;
-
-  timer.value = setTimeout(() => {
-    data.touchLogo = TouchLogo.normal;
-  }, 180);
-
-  if (innerAudioContext.paused) {
-    innerAudioContext.play();
-  }
-};
 
 const handleOnClickLogo = () => {
+  if (touching.value) {
+    return;
+  }
+  touching.value = true;
+  setTimeout(() => { touching.value = false; }, animaTime.value);
+
   emit('onClickLogo')
 }
-
-const { touchLogo } = toRefs(data);
 </script>
 
 <style lang="scss">
@@ -94,18 +74,27 @@ const { touchLogo } = toRefs(data);
     font-weight: 600;
   }
 
+  @keyframes ZoomInOut {
+    33% {
+      transform: scale(0.7, 0.7);
+    }
+
+    66% {
+      transform: scale(1.2, 1.2);
+    }
+
+    100% {
+      transform: scale(1, 1);
+    }
+  }
+
   .logos {
     width: 68rpx;
     max-height: 68rpx;
-    transition: transform 0.2s;
-  }
 
-  .touch-logo {
-    transform: scale(0.7, 0.7);
-  }
-
-  .touch-end-logo {
-    transform: scale(1.2, 1.2);
+    &.touching {
+      animation: ZoomInOut var(--anima-time) ease;
+    }
   }
 
   .content {

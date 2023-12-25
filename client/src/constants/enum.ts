@@ -14,13 +14,6 @@ export enum NodeEnvEnum {
 export enum GlobalKeys {}
 // useServe = 'useServe',
 
-/** 点击 logo 状态枚举 */
-export enum TouchLogo {
-  normal = 0, // 正常
-  down = 1, // 点击
-  up = 2, // 放开
-}
-
 /**
  * plan 计划类型
  * ```
