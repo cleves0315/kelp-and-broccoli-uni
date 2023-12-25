@@ -3,7 +3,7 @@
     <div class="head">
       <div class="title">我在海带与西兰花</div>
       <image class="logos" :class="{ 'touch-logo': touchLogo == 1, 'touch-end-logo': touchLogo == 2 }" mode="widthFix"
-        @touchstart="logoTouchStart" @touchend="logoTouchEnd" @click="onPlay" :src="logo">
+        @touchstart="logoTouchStart" @touchend="logoTouchEnd" @click="handleOnClickLogo" :src="logo">
       </image>
     </div>
     <div class="content">
@@ -27,6 +27,7 @@ export interface Props {
 }
 
 const timer = ref<NodeJS.Timeout>(null);
+const emit = defineEmits(['onClickLogo'])
 const { day = 0 } = defineProps<Props>();
 const data = reactive({
   touchLogo: TouchLogo.normal,
@@ -55,6 +56,10 @@ const logoTouchEnd = () => {
     innerAudioContext.play();
   }
 };
+
+const handleOnClickLogo = () => {
+  emit('onClickLogo')
+}
 
 const { touchLogo } = toRefs(data);
 </script>

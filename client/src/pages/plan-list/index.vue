@@ -2,9 +2,9 @@
   <div class="plan-list-page" :class="{ 'no-scroll': store.touching === 'horizontal' }">
     <CustomNavigationBar :title="naviBarTitle()" :bgColor="decorateBgColor()" :onBack="handleNaviBarBack" />
     <Headers :title="naviBarTitle()" />
-    <PlanList :list="todoList" :strongIndex="strongIndex" @long-touch-item="handleOnLongTouchListItem" />
+    <PlanList :list="todoList" :show-top="true" :strongIndex="strongIndex" @long-touch-item="handleOnLongTouchListItem" />
     <MarkBtn class-name="mark-btn" :direction="checkFinish" :onClick="handleClickMark" />
-    <PlanList :visibility="checkFinish" :list="finisheList()" />
+    <PlanList :visibility="checkFinish" :showTop="false" :list="finisheList()" />
     <FooterInput inputPlaceTxt="添加任务" :confirm="handleConfrim" />
   </div>
 </template>
@@ -66,7 +66,7 @@ const todoList = computed(() => {
 // 获取已完成计划列表
 const finisheList = () => {
   return plnaList()
-    .filter((plan) => plan.is_finish);
+    .filter((plan) => plan.is_finish).sort((x, y) => y.finish_date - x.finish_date);
 };
 
 const handleNaviBarBack = () => {

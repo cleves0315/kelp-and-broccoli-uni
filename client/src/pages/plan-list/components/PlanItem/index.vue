@@ -11,13 +11,13 @@
           <div class="head" :class="{ finished: plan.is_finish }">{{ plan.title }}</div>
           <div class="detail-content">
             <!-- 置顶 -->
-            <view class="tips-block" v-if="!!plan.top_time">
+            <view class="tips-block" v-if="getShowTop()">
               <image class="icon" style="margin-right: 4rpx;" :src="topIcon"></image>
               <text class="txt" style="color: #07b45b; font-size: 20rpx; font-weight: 500;">Top</text>
             </view>
             <!-- 我的一天 -->
             <view class="tips-block" v-if="plan.type === PlanTypeEnum.today">
-              <div v-if="!!plan.top_time" class="split"></div>
+              <div v-if="getShowTop()" class="split"></div>
               <image class="icon" :src="liveToday"></image>
               <text class="txt">我的一天</text>
             </view>
@@ -50,30 +50,31 @@
 </template>
 
 <script lang="ts" setup>
-import { IPlan } from '@/types/plan';
-import Ident from '@/components/Ident/index.vue';
-import { ref, reactive, toRefs, defineProps, watch, onBeforeMount, onMounted, getCurrentInstance } from 'vue';
-import LongTouch from '@/components/LongTouch/index.vue';
 import sunlight from '@/assets/plan/sunlight.svg';
+import Ident from '@/components/Ident/index.vue';
+import LongTouch from '@/components/LongTouch/index.vue';
+import { IPlan } from '@/types/plan';
+import { defineProps, getCurrentInstance, onMounted, reactive, ref, toRefs, watch } from 'vue';
 // import repeatLive from '@/assets/plan/repeat_live.svg';
 // import repeatExpired from '@/assets/plan/repeat_expired.svg';
+import delSvg from '@/assets/del_white.svg';
+import bell from '@/assets/plan/bell.svg';
+import bookSvg from '@/assets/plan/book.svg';
 import dateLive from '@/assets/plan/date_live.svg';
 import dateOver from '@/assets/plan/date_over.svg';
-import bookSvg from '@/assets/plan/book.svg';
-import bell from '@/assets/plan/bell.svg';
-import delSvg from '@/assets/del_white.svg';
 import topSvg from '@/assets/plan/top.svg';
-import { usePlanStore } from '@/stores/plan';
 import { PlanTypeEnum } from '@/constants/enum';
+import { usePlanStore } from '@/stores/plan';
 
 export type PlantItemProps = {
   plan: IPlan;
   strong?: boolean;
+  showTop?: boolean;
 };
 
 const props = defineProps<PlantItemProps>();
 const emit = defineEmits(['longTouch'])
-const { plan } = props;
+const { plan, showTop } = props;
 
 const store = usePlanStore();
 
@@ -118,6 +119,10 @@ watch(
     }
   },
 );
+
+const getShowTop = () => {
+  return showTop && !!plan.top_time
+}
 
 /**
  * 判断传入的时间是否大于当前时间

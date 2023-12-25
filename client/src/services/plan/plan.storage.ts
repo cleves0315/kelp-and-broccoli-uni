@@ -13,7 +13,7 @@ class PlanStorage {
       // 按创建时间排序
       planList.sort((x, y) => y.create_time - x.create_time);
       // 置顶时间排序
-      planList.sort((x, y) => (y.top_time || 0) - (x.top_time || 0));
+      // planList.sort((x, y) => (y.top_time || 0) - (x.top_time || 0));
     }
 
     return Promise.resolve(planList || []);
