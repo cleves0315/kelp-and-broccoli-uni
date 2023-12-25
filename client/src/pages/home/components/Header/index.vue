@@ -4,7 +4,7 @@
       <div class="title">我在海带与西兰花</div>
       <image class="logos" :class="{ 'touching': !!touching }" :style="{
         '--anima-time': `${animaTime / 1000}s`
-      }" mode="widthFix" @click="handleOnClickLogo" :src="logo">
+      }" mode="widthFix" @click="handleOnClickLogo" @touchstart="handleTouchStartLogo" :src="logo">
       </image>
     </div>
     <div class="content">
@@ -26,21 +26,22 @@ export interface Props {
   day?: number;
 }
 
-const timer = ref<NodeJS.Timeout>(null);
 /** 动画时间(ms) */
 const animaTime = ref(400);
 const touching = ref(false)
-const emit = defineEmits(['onClickLogo'])
+const emit = defineEmits(['clickLogo'])
 const { day = 0 } = defineProps<Props>();
 
-const handleOnClickLogo = () => {
+const handleTouchStartLogo = () => {
   if (touching.value) {
     return;
   }
   touching.value = true;
   setTimeout(() => { touching.value = false; }, animaTime.value);
+}
 
-  emit('onClickLogo')
+const handleOnClickLogo = () => {
+  emit('clickLogo')
 }
 </script>
 

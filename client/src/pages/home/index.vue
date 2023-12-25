@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <Headers :day="day" />
+    <Headers :day="day" @click-logo="handleClickLogo" />
     <Banner :percentage="getTodayPercentage()" :finishCount="getTodayFinishCount()" :total="getTodayCount()"
       :on-click="intoPlanList" />
     <Contents :items="[
@@ -159,6 +159,20 @@ const intoPlanList = () => {
     url: `/pages/plan-list/index?type=${PlanTypeEnum.all}`,
   });
 };
+
+const handleClickLogo = async () => {
+  const emial = 'cleves0315@foxmail.com'
+  const res = await uni.showModal({
+    title: '感谢支持',
+    content: `意见投稿: \n${emial}`,
+    cancelText: '确定',
+    confirmText: '复制邮箱'
+  })
+
+  if (res.confirm) {
+    uni.setClipboardData({ data: emial });
+  }
+}
 
 const { day, todayBg, animaIcon, showAnimaRain } = toRefs(data);
 </script>
