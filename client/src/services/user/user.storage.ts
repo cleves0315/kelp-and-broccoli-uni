@@ -1,4 +1,5 @@
 import { LATEST_VERSION } from '@/constants';
+import { PlanNoEnum } from '@/constants/enum';
 import { GetUserDayRes, GetUserInfoRes, IUseInfo } from '@/types/user';
 import { getStorageSync, setStorageSync } from '@/utils/storage';
 import { planStorage } from '../plan/plan.storage';
@@ -24,7 +25,13 @@ class UserStorage {
       await this.updateTime();
 
       if (this.checkLatestVersion() !== '1') {
-        await planStorage.addNoticePlan();
+        // TODO: 列表中不存在 wiki 才加入通知。（del）
+        const list = await planStorage.getPlanList();
+        const wikiPlan = list.find((item) => item.plan_no === PlanNoEnum.wiki);
+        if (!wikiPlan) {
+          await planStorage.addNoticePlan();
+        }
+
         this.update('last_version', LATEST_VERSION);
       }
 
